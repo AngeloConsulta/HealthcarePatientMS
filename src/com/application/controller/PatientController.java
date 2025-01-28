@@ -21,7 +21,7 @@ public class PatientController {
     private final PatientView ptview = new PatientView();
     private final PatientDAO ptDAO = new PatientDAO();
     private final Application app = new Application();
-   
+    private final AdminController admControl = new AdminController();
         
     public void managePatients(){
         while(true){
@@ -40,6 +40,7 @@ public class PatientController {
                     deletePatient();
                     break;
                 case 5:
+                    admControl.handleDashboard();
                     return;
                 default:
                     ptview.displayMessage("Invalid Choice");
@@ -70,16 +71,50 @@ public class PatientController {
         }
     }
     private void updatePatient(){
+        // Display existing patients
+        List<Patient> patients = ptDAO.getAllPatient();
+         ptview.displayPatients(patients);
+
+        // Get the patient ID to update
+        int patientId =  ptview.getPatientIdInput("Enter the ID of the patient to update: ");
+
+        // Fetch the patient to update
+        Patient patient = patients.stream()
+                              .filter(p -> p.getId() == patientId)
+                              .findFirst()
+                              .orElse(null);
+        if (patient == null) {
+            ptview.displayMessage("Patient with ID " + patientId + " not found!");
+            return;
+        }
+
+         // Get updated details from the user
+        ptview.displayMessage("Enter new details for the patient (leave blank to keep current values):");
+        patient.setFull_name(ptview.getInputOrDefault("Name", patient.getFull_name()));
+        patient.setContact_number(ptview.getInputOrDefault("Contact Number", patient.getContact_number()));
+        patient.setGender( ptview.getInputOrDefault("Gender", patient.getGender()));
+        patient.setDob(ptview.getDateInputOrDefault("Date of Birth: (YYYY-MM-DD)", patient.getDob()));
+        patient.setAddress( ptview.getInputOrDefault("Address", patient.getAddress()));
         
+
+    // Update the patient in the database
+        boolean success = ptDAO.updatePatient(patient);
+        if (success) {
+            ptview.displayMessage("Patient updated successfully!");
+        } else {
+            ptview.displayMessage("Failed to update the patient. Please try again.");
+        }
+
     }
-    
     private void deletePatient(){
         
     }
+    
     public void handlePatientFlow(){
         while(true){
-            int choice = ptview.handleLoginPatient();
-            switch(choice){
+            try{
+                int choice = ptview.handleLoginPatient();
+                switch(choice){
                 case 1:
                     login();
                     break;
@@ -90,8 +125,13 @@ public class PatientController {
                     ptview.displayMessage("Invalid Choice");
                 
             }
+            }catch(Exception e){
+                System.out.println("Invalid Input, Please input number only");
+                app.mainMenu();
+            }
         }
     }
+    //This is only accessed by the patient user
     public void login(){
         Patient login = ptview.displayLoginPrompt();
         boolean isAuthenticated = ptDAO.verifyCredentials(login);
@@ -101,13 +141,15 @@ public class PatientController {
             
         }else{
             ptview.displayMessage("Invalid Credentials. Please try Again");
+            handlePatientFlow();
         }
         
     }
 
     public void displayDashboard(){
         while(true){
-            int choice = ptview.displayDashboard();
+            try{
+                int choice = ptview.displayDashboard();
             switch(choice){
                 case 1:
                 ptview.displayMessage("Booking an appointment..");
@@ -129,6 +171,10 @@ public class PatientController {
                 displayDashboard();
             
             }
+            }catch(Exception e){
+                
+            }
+            
         }
     }
 

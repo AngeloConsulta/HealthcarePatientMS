@@ -7,6 +7,7 @@ package com.application.view;
 import com.application.model.Patient;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,9 +28,6 @@ public class PatientView {
         return new Patient (0,username, password, null,null,null, null, null,null,null);
     }
     
-    public void displayPasswordPrompt(){
-        System.out.print("Enter password: ");
-    }
     public int handleLoginPatient(){
         System.out.println("\n Patient Dashboard System");
         System.out.println("[1]  Login");
@@ -71,50 +69,96 @@ public class PatientView {
     }
     
     public Patient getPatientDetails(){
-        sc.nextLine();
+        Patient patient = new Patient();
         System.out.print("\nCreate and Add Patient details");
         System.out.print("\nUsername: ");
-        String username = sc.nextLine();
+        patient.setUsername(sc.next());
         System.out.print("Password: ");
-        String password = sc.nextLine();
-        System.out.print("Firstname: ");
-        String first_name = sc.nextLine();
-        System.out.print("Middlename: ");
-        String middle_name= sc.nextLine();
-        System.out.print("Lastname: ");
-        String last_name = sc.nextLine();
-        System.out.print("Date of Birth (yyyy-mm-dd): ");
-        String dobInput=sc.nextLine();
-        LocalDate dob = LocalDate.parse(dobInput, DateTimeFormatter.ISO_DATE);
+        patient.setPassword(sc.next());
+        System.out.print("Fullname: ");
+        patient.setFull_name(sc.next()+  sc.nextLine());
+        LocalDate dob = null;
+        while (dob == null) {
+            try {
+               System.out.print("Date of Birth (yyyy-mm-dd): ");
+               String dobInput = sc.nextLine().trim();
+               dob = LocalDate.parse(dobInput, DateTimeFormatter.ISO_DATE);
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Please enter in yyyy-mm-dd format."+ e);
+        }
+        }
+        patient.setDob(dob);
         System.out.print("Gender: ");
-        String  gender = sc.nextLine();
+        patient.setGender(sc.next());
         System.out.print("Contact Number: ");
-        String contact_number = sc.nextLine();
-       
+        patient.setContact_number(sc.next());
         System.out.print("Address: ");
-        String address=sc.nextLine();
+        patient.setAddress(sc.next()+sc.nextLine());
         
-        return new Patient(username, password,first_name,last_name,middle_name, dob, gender, contact_number,address);
+        return patient;
     }
+    
+    //This is for Update CRUD API
+    public int getPatientIdInput(String prompt) {
+        System.out.print(prompt);
+        while (!sc.hasNextInt()) {
+            System.out.println("Invalid input. Please enter a valid ID.");
+            sc.next(); // Clear invalid input
+            System.out.print(prompt);
+        }
+        return sc.nextInt();
+    }
+
+    // Get string input with a default value
+    public String getInputOrDefault(String fieldName, String currentValue) {
+        System.out.print(fieldName + " [" + currentValue + "]: ");
+        String input = sc.nextLine().trim();
+        return input.isEmpty() ? currentValue : input;
+    }
+
+    // Get LocalDate input with a default value
+    public LocalDate getDateInputOrDefault(String fieldName, LocalDate currentValue) {
+        System.out.print(fieldName + " [" + (currentValue != null ? currentValue.toString() : "N/A") + "]: ");
+        String input = sc.nextLine().trim();
+        if (input.isEmpty()) {
+            return currentValue;
+        }
+        try {
+            return LocalDate.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        } catch (DateTimeParseException e) {
+            System.out.println("Invalid date format. Please enter in YYYY-MM-DD format.");
+            return getDateInputOrDefault(fieldName, currentValue);
+        }
+    }
+
+    
     public void displayPatients(List<Patient> patients){
+        String format = "| %-5s | %-10s | %-10s  | %-30s | %-15s | %-10s | %-20s | %-30s | %-30s | %-30s | %-10s |  %-30s |  %-30s |  %-20s |\n";
         System.out.println("\nList of Patients: ");
-        System.out.println("-------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%-5s %-15s %-15s %-15s %-10s %-10s %-15s %-30s\n",
-        "ID", "Username", "First Name", "Last Name", "Gender", "DOB", "Contact", "Address");
-        System.out.println("-------------------------------------------------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf( format, "ID", "Username","Password", "Full Name", "Date of Birth", "Gender", "Contact No.", "Address", "Emergency Contact Name", "Emergency Contact No.", "Blood Type","Medical Condition","Medication","Allergies");
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         
         for (Patient patient : patients){
-            System.out.printf("%-5d %-15s %-15s %-15s %-10s %-10s %-15s %-30s\n",
+            System.out.printf(format,
                     patient.getId(),
                     patient.getUsername(),
-                    patient.getFirst_name(),
-                    patient.getLast_name(),
+                    patient.getPassword(),
+                    patient.getFull_name(),
+                    (patient.getDob() != null ? patient.getDob().toString() : "N/A"),
                     patient.getGender(),
-                    patient.getDob(),
                     patient.getContact_number(),
-                    patient.getAddress());
+                    patient.getAddress(),
+                    patient.getEmergency_contact_name(),
+                    patient.getEmergency_contact_number(),
+                    patient.getBlood_type(),
+                    patient.getMedical_conditions(),
+                    patient.getMedications(),
+                    patient.getAllergies());
+            
+            
         }
-        System.out.println("-------------------------------------------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         
         
     

@@ -16,14 +16,19 @@ import java.util.Scanner;
  */
 public class DoctorView {
     private Scanner sc = new Scanner(System.in);
-    
-    public void displayLoginPrompt(){
-        System.out.print("Enter username: ");
+    //This section is for Doctor's to access
+    public Doctor displayLoginPrompt(){ //Di pa tapos Login the Doctor user
+        Doctor doctor = new Doctor();
+        System.out.println("\nLogin to Doctor Dashboard");
+        System.out.print("Enter Username: ");
+        doctor.setUsername(sc.nextLine());
+        System.out.print("Enter Password: ");
+        doctor.setPassword(sc.nextLine());
+        
+        return doctor;
     }
     
-    public void displayPasswordPrompt(){
-        System.out.print("Enter password: ");
-    }
+   
     public int handleLoginDoctor(){
         System.out.println("\nDoctors Dashboard System");
         System.out.println("[1]  Login");
@@ -35,17 +40,20 @@ public class DoctorView {
     }
     
     
-    public void displayDashboard(){
+    public int displayDashboard(){
         System.out.println("\nWelcome to the Doctors Dashboard");
+        System.out.println("\n");
         System.out.println("1. View Appointment");
         System.out.println("2. Approve/Reject Appointment");
         System.out.println("3. View Patients Report/Record");
         System.out.println("4. Logout");
-        
-        System.out.print("\nEnter your choice");
-        int doctorchoice=sc.nextInt();
+        System.out.print("\nEnter your choice: ");
+        int choice = sc.nextInt();
         sc.nextLine();
+        return choice;
     }
+    
+    //This Line section is for Admin to Access
     public void displayMessage(String message){
         System.out.println(message);
     }
@@ -65,22 +73,23 @@ public class DoctorView {
         return sc.nextInt();
         
     }
+    //This is for Create API CRUD 
     public Doctor getDoctorDetails(){
+        Doctor doctor = new Doctor();
         System.out.print("Enter Username: ");
-        String username =sc.next();
+        doctor.setUsername(sc.next());
         System.out.print("Enter Password: ");
-        String password = sc.next();
-        sc.nextLine();
+        doctor.setUsername(sc.next());
         System.out.print("Enter Doctor's Name: ");
-        String name = sc.nextLine();
+        doctor.setName(sc.next()+ sc.nextLine());
         System.out.print("Enter Specialization: ");
-        String specialization = sc.nextLine();
+        doctor.setSpecialization(sc.next());
         System.out.print("Enter Licensed Number: ");
-        String licenseNumber = sc.nextLine();
+        doctor.setLicenseNumber(sc.next());
         System.out.print("Enter Contact Number: ");
-        String contactNumber = sc.nextLine();
+        doctor.setContactNumber(sc.next());
         System.out.print("Gender: ");
-        String gender = sc.nextLine();
+        doctor.setGender(sc.next());
         LocalDate DOB = null;
         while (DOB == null) {
             try {
@@ -88,21 +97,89 @@ public class DoctorView {
                String dobInput = sc.nextLine().trim();
                DOB = LocalDate.parse(dobInput, DateTimeFormatter.ISO_DATE);
             } catch (Exception e) {
-                System.out.println("Invalid date format. Please enter in yyyy-mm-dd format.");
+                System.out.println("Invalid date format. Please enter in yyyy-mm-dd format."+ e);
         }
         }
+        doctor.setDOB(DOB);
         System.out.print("Enter Address: ");
-        String address = sc.nextLine();
+        doctor.setAddress(sc.next()+ sc.nextLine());
 
-        return new Doctor(username, password, name, specialization, contactNumber, address,licenseNumber,gender,DOB );
+        return doctor;
     }
-    public void displayDoctorTable(List<Doctor> doctors){
-        System.out.printf("%-15s %-15s %-20s %-20s %-20s %-15s %-10s %-15s %-30s\n", 
-        "Username", "Name", "Specialization", "License No.", "Contact No.", "Gender", "DOB", "Address");
-        System.out.println("-------------------------------------------------------------------------------------------------------");
-        for (Doctor doctor : doctors) {
-        System.out.println(doctor.toString());
+    //This is a CRUD API for VIEW or READ which is di pa tapos
+    public void displayDoctorTable(List<Doctor> doctors) {
+    String format = "| %-5s | %-15s | %-20s | %-20s | %-20s | %-15s | %-10s | %-15s | %-25s | %-12s |\n";
+    
+    System.out.println("------------------------------------------------------------------------------------------------------------"
+                       + "---------------------------------------------------------------------------------");
+    System.out.printf(format, "ID", "Username", "Name", "Specialization", "License No.","Contact No." ,"Gender", "Date of Birth", "Address", "Availability");
+    System.out.println("------------------------------------------------------------------------------------------------------------"
+                       + "---------------------------------------------------------------------------------");
+    
+    for (Doctor doctor : doctors) {
+        System.out.printf(format,
+            doctor.getId(),
+            doctor.getUsername(),
+            doctor.getName(),
+            doctor.getSpecialization(),
+            doctor.getLicenseNumber(),
+            doctor.getContactNumber(),
+            doctor.getGender(),
+            (doctor.getDOB() != null ? doctor.getDOB().toString() : "N/A"),
+            doctor.getAddress(),
+            (doctor.getAvailabilityStatus() != null ? doctor.getAvailabilityStatus().toString() : "N/A")
+        );
+    }
+    System.out.println("------------------------------------------------------------------------------------------------------------"
+                       + "---------------------------------------------------------------------------------");
+    }
+    // This the UPDATE CRUD API
+    // Display a prompt and get integer input for doctor ID
+    public int getDoctorIdInput(String prompt) {
+        System.out.print(prompt);
+        return sc.nextInt();
+    }
+
+    // Get updated value or keep the current value if input is blank
+    public String getInputOrDefault(String fieldName, String currentValue) {
+        System.out.print(fieldName + " [" + currentValue + "]: ");
+        String input = sc.nextLine();
+       return input.isEmpty() ? currentValue : input;
+    }
+
+    // Get updated date or keep the current date if input is blank
+    public LocalDate getDateInputOrDefault(String fieldName, LocalDate currentValue) {
+        System.out.print(fieldName + " [" + (currentValue != null ? currentValue.toString() : "N/A") + "]: ");
+        String input = sc.nextLine();
+        return input.isEmpty() ? currentValue : LocalDate.parse(input);
+    }
+
+
+    public int displayDeleteChoice(){ //This is for Displaying Delete choice
+        System.out.println("\nManage Doctor's Information:");
+        System.out.println("[1] Archive/Restore: ");
+        System.out.println("[2] Hard Delete: ");
+        System.out.println("[3] Back ");
+        System.out.print("\nEnter your choice: ");
+        return sc.nextInt();
+        
+    }    
+//    This is for DELETE CRUD Operation Soft Delete
+    public void displayArchiveDoctors(List <Doctor> doctors){
+        System.out.println("Archived Doctors: ");
+        for(Doctor doctor : doctors){
+            System.out.printf("ID: %d, Name: %s, Username: %s, Specialization: %s,License: %s , Contact: %s, Gender: %s, DOB: %s, Address: %s%n",
+                    doctor.getId(),doctor.getName(),doctor.getUsername(),doctor.getSpecialization(),doctor.getLicenseNumber(),doctor.getContactNumber(),
+                    doctor.getGender(),doctor.getDOB(),doctor.getAddress());
+     
         }
+    }
+    public int[] getArchiveChoice(){
+        System.out.print("Enter Doctor ID to archive/restore: ");
+        int doctorId =sc.nextInt();
+        System.out.print("Enter 1 to Archive or 0 to Restore: ");
+        int choice =sc.nextInt();
+        return new int[] {doctorId, choice};
     }
     
 }

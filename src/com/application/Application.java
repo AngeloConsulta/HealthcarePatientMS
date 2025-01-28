@@ -27,9 +27,10 @@ public class Application {
         System.out.println("[3] Patient");
 
         System.out.print("\nEnter your choice: ");
-        int choice = sc.nextInt();
-
-        switch (choice) {
+        
+        try{
+           int choice = sc.nextInt();
+           switch (choice) {
             case 1 :
                 adminController.handleAdminFlow();
                 break;
@@ -47,6 +48,13 @@ public class Application {
                 System.out.println("Invalid choice. Please try again.");
                 mainMenu();
         }
+        }catch(Exception e){
+             System.out.println("Invalid Input, Please input number only");
+             mainMenu();
+        }
+      
+
+        
     }
 
 }

@@ -37,6 +37,10 @@ public class Doctor {
     
     }
 
+    public Doctor() {
+    }
+    
+
     public Doctor(int id, String username, String password, String name, String specialization, String contactNumber, String address, String licenseNumber, String gender, LocalDate DOB, LocalDate availabilityStatus) {
         this.id = id;
         this.username = username;
@@ -51,58 +55,99 @@ public class Doctor {
         this.availabilityStatus = availabilityStatus;
     }
 
-   
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getLicenseNumber() {
-        return licenseNumber;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public LocalDate getDOB() {
-        return DOB;
-    }
-
-    
 
     public String getSpecialization() {
         return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
     }
 
     public String getContactNumber() {
         return contactNumber;
     }
 
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
     public String getAddress() {
         return address;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Doctor{" + "id=" + id + ", username=" + username + ", password=" + password + ", name=" + name + ", specialization=" + specialization + ", contactNumber=" + contactNumber + ", address=" + address + ", licenseNumber=" + licenseNumber + ", gender=" + gender + ", DOB=" + DOB + '}';
-//    }
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public LocalDate getDOB() {
+        return DOB;
+    }
+
+    public void setDOB(LocalDate DOB) {
+        this.DOB = DOB;
+    }
+
+    public LocalDate getAvailabilityStatus() {
+        return availabilityStatus;
+    }
+
+    public void setAvailabilityStatus(LocalDate availabilityStatus) {
+        this.availabilityStatus = availabilityStatus;
+    }
+    
 
     @Override
     public String toString() {
-        return String.format("%-15s %-15s %-20s %-20s %-20s %-15s %-10s %-15s %-30s",
-        username, name, specialization, licenseNumber, contactNumber, gender, DOB, address);
+        return String.format("%-5s %-15s %-15s %-20s %-20s %-20s %-15s %-10s %-15s %-30s",
+        id,username, name, specialization, licenseNumber, contactNumber, gender, DOB, address);
     }
   
 }

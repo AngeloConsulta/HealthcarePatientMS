@@ -21,6 +21,7 @@ import com.application.view.AdminView;
 import java.util.Scanner;
 import java.util.ArrayList;
 
+
 public class AdminController {
     private final Application app = new Application();
     private final AdminView adminView = new AdminView();
@@ -38,14 +39,28 @@ public class AdminController {
         System.out.println("[2]  Login");
         System.out.println("[3]  Back to Main Menu");
         System.out.print("\nEnter your choice: ");
-        int choice = sc.nextInt();
+//        int choice = sc.nextInt();
         
-        switch(choice){
-            case 1 ->registerAdmin();
-            case 2 ->loginAdmin();
-            case 3 -> app.mainMenu();
-            default ->adminView.displayMessage("Invalid choice, Please try again");
-        }  
+        try{
+            int choice =sc.nextInt();
+            switch(choice){
+                case 1 :
+                    registerAdmin();
+                    break;
+                case 2 :
+                    loginAdmin();
+                    break;
+                case 3:
+                    app.mainMenu();
+                default :
+                    adminView.displayMessage("Invalid choice, Please try again" );
+                    handleAdminFlow();
+            }
+            
+        }catch(Exception e){
+             System.out.println("Invalid Input, Please input number only");
+             app.mainMenu();
+        } 
     }
     public void registerAdmin(){
         Admin admin = adminView.getAdminDetails();
@@ -56,9 +71,10 @@ public class AdminController {
             handleAdminFlow();
         }else{
             adminView.displayMessage("Registration Failed. Try again");
+             handleAdminFlow();
         }
     }
-    public void loginAdmin(){
+    public void loginAdmin(){ ///Logging In of Admin
         Admin admin =adminView.getLoginDetails();
         boolean isAuthenticated = adminDAO.verifyCredentials(admin);
         
@@ -67,6 +83,7 @@ public class AdminController {
             handleDashboard();
         }else{
             adminView.displayMessage("Invalid Credentials. Try Again.");
+            handleAdminFlow();
         }
     }
     public void handleDashboard(){
@@ -87,8 +104,7 @@ public class AdminController {
                     break;
                 default:
                     adminView.displayMessage("Invalid Choice. Try Again");
-                
-                
+                    handleDashboard(); 
             }
         }
     }
