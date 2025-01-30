@@ -17,17 +17,18 @@ import java.util.Scanner;
  */
 public class PatientView {
     private Scanner sc = new Scanner(System.in);
-    
+    //This is for patient side only
     public Patient displayLoginPrompt(){
+        Patient patient = new Patient();
         System.out.println("\nLogin to Patient Dashboard ");
         System.out.print("Enter Username: ");
-        String username = sc.nextLine();
+        patient.setUsername(sc.nextLine());
         System.out.print("Enter password: ");
-        String password = sc.nextLine();
+        patient.setPassword(sc.nextLine()); 
         
-        return new Patient (0,username, password, null,null,null, null, null,null,null);
+        return patient;
     }
-    
+    //This is for patient side only
     public int handleLoginPatient(){
         System.out.println("\n Patient Dashboard System");
         System.out.println("[1]  Login");
@@ -37,18 +38,48 @@ public class PatientView {
         sc.nextLine();
         return choice;
     }
-    
+    //This is for the Patient Side only
     public int displayDashboard(){
         System.out.println("\nWelcome to the Patient Dashboard");
-        System.out.println("1. Book an Appointment");
-        System.out.println("2. View Upcoming Appointments");
-        System.out.println("3, Cancel an Appointment");
-        System.out.println("4. Logout");
+        System.out.println("[1] View Personal Details");
+        System.out.println("[2] Update Personal Info");
+        System.out.println("[3] View Available Doctors");
+        System.out.println("[4] Book an Appointment");
+        System.out.println("[5] Cancel an Appointment");
+        System.out.println("[6] Logout");
         
         System.out.print("\nEnter your choice: ");
         int choice=sc.nextInt();
         sc.nextLine();
         return choice;
+    }
+    //This is View API Access by Patient User
+    public void displayPatientDetails(Patient patient) {
+       
+        System.out.println("Username: " + patient.getUsername());
+        System.out.println("Full Name: " + patient.getFull_name());
+        System.out.println("Date of Birth: " + patient.getDob());
+        System.out.println("Gender: " + patient.getGender());
+        System.out.println("Contact Number: " + patient.getContact_number());
+        System.out.println("Address: " + patient.getAddress());
+        System.out.println("Emergency Contact: " + patient.getEmergency_contact_name() + " (" + patient.getEmergency_contact_number() + ")");
+        System.out.println("Blood Type: " + patient.getBlood_type());
+        System.out.println("Medical Conditions: " + patient.getMedical_conditions());
+        System.out.println("Medications: " + patient.getMedications());
+        System.out.println("Allergies: " + patient.getAllergies());
+        System.out.println("======================================");
+    }
+    public int getDoctorIdForAppointment(){
+        System.out.print("Enter Doctor ID to book an appointment: ");
+        return sc.nextInt();
+    }
+    public String getAppointmentdate(){
+        System.out.print("Enter Appointment Date (YYYY-MM-DD)(HRS:MIN): ");
+        return sc.next();
+    }
+    public String getAppointmentReason(){
+        System.out.print("Enter Reason for appointment: ");
+        return sc.nextLine();
     }
     public void displayMessage(String message){
         System.out.println(message);
@@ -57,6 +88,8 @@ public class PatientView {
     public String getInput(){
         return sc.nextLine();
     }
+    
+    //This is for the Admin Access
     public int getPatientManagementChoice(){
         System.out.println("\nManage Patient Records:");
         System.out.println("[1] Add New Patient");
@@ -163,12 +196,28 @@ public class PatientView {
         
     
     }
-    public int displayBackOption() {
-    System.out.println("\n[1] Back to Manage Patient Records");
-    System.out.print("\nEnter your choice: ");
-    return sc.nextInt();
-}
+    
+    public int displayDelChoice(){ //This is for Displaying Delete choice
+        System.out.println("\nManage Patient's Information:");
+        System.out.println("[1] Archive: ");
+        System.out.println("[2] Restore: ");
+        System.out.println("[3] Permanently delete ");
+        System.out.println("[4] Back ");
+        System.out.print("\nEnter your choice: ");
+        return sc.nextInt();
+        
+    }    
+    public int getPatientIdInp(String message){
+        System.out.print(message);
+        return sc.nextInt();
+    }
 
+    public int getArchiveRestoreChoice() {
+        System.out.println("\n[1] Restore a Patient record");
+        System.out.println("[2] Back");
+        System.out.print("Enter your choice: ");
+        return sc.nextInt();
+    }
     
         
 }

@@ -28,6 +28,23 @@ public class Patient {
     public Patient() {
     }
 
+    public Patient(int id, String username, String password, String full_name, LocalDate dob, String gender, String contact_number, String address, String emergency_contact_name, String emergency_contact_number, String blood_type, String medical_conditions, String medications, String allergies) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.full_name = full_name;
+        this.dob = dob;
+        this.gender = gender;
+        this.contact_number = contact_number;
+        this.address = address;
+        this.emergency_contact_name = emergency_contact_name;
+        this.emergency_contact_number = emergency_contact_number;
+        this.blood_type = blood_type;
+        this.medical_conditions = medical_conditions;
+        this.medications = medications;
+        this.allergies = allergies;
+    }
+
     
     public Patient(String username, String password, String full_name, LocalDate dob, String gender, String contact_number, String address) {
         this.username = username;

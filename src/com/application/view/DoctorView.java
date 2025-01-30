@@ -43,15 +43,31 @@ public class DoctorView {
     public int displayDashboard(){
         System.out.println("\nWelcome to the Doctors Dashboard");
         System.out.println("\n");
-        System.out.println("1. View Appointment");
-        System.out.println("2. Approve/Reject Appointment");
-        System.out.println("3. View Patients Report/Record");
-        System.out.println("4. Logout");
+        System.out.println("[1] View Booking Appointment");
+        System.out.println("[2] Delete Appointment ");
+        System.out.println("[3] View Personal Details");
+        System.out.println("[4] Update for Availability Schedule");
+        System.out.println("[5] Logout");
         System.out.print("\nEnter your choice: ");
         int choice = sc.nextInt();
         sc.nextLine();
         return choice;
     }
+    
+     public void displayDoctorDetails(Doctor doctor) {
+       
+        System.out.println("Username: " + doctor.getUsername());
+        System.out.println("Full Name: " + doctor.getName());
+        System.out.println("Specialization: " + doctor.getSpecialization());
+        System.out.println("Contact Number: " + doctor.getLicenseNumber());
+        System.out.println("Contact Number: " + doctor.getContactNumber());
+        System.out.println("Gender: " + doctor.getGender());
+        System.out.println("Date of Birth: " + doctor.getDOB());
+        System.out.println("Address: " + doctor.getAddress());
+        System.out.println("Availability Status: " + doctor.getAvailabilityStatus());
+        System.out.println("======================================");
+    }
+    
     
     //This Line section is for Admin to Access
     public void displayMessage(String message){
@@ -133,6 +149,24 @@ public class DoctorView {
     System.out.println("------------------------------------------------------------------------------------------------------------"
                        + "---------------------------------------------------------------------------------");
     }
+    public void viewAllDoctorForPatient(List<Doctor> doctors){
+         String format = "| %-4s | %-20s | %-15s | %-20s | %-15s |\n";
+        
+        System.out.println("------------------------------------------------------------------------------------------");
+        System.out.printf(format, "ID", "Name", "Specialization", "Address", "Availability");
+        System.out.println("------------------------------------------------------------------------------------------");
+
+       // Loop through the doctors list and display only the required fields
+        for (Doctor doctor : doctors) {
+        System.out.printf(format, 
+                      doctor.getId(), doctor.getName(), 
+                      doctor.getSpecialization(), doctor.getAddress(), 
+                      doctor.getAvailabilityStatus() != null ? doctor.getAvailabilityStatus().toString() : "N/A");
+        }
+        System.out.println("------------------------------------------------------------------------------------------");
+    }
+    
+    
     // This the UPDATE CRUD API
     // Display a prompt and get integer input for doctor ID
     public int getDoctorIdInput(String prompt) {
@@ -155,31 +189,27 @@ public class DoctorView {
     }
 
 
-    public int displayDeleteChoice(){ //This is for Displaying Delete choice
+    public int displayDocDelChoice(){ //This is for Displaying Delete choice
         System.out.println("\nManage Doctor's Information:");
-        System.out.println("[1] Archive/Restore: ");
-        System.out.println("[2] Hard Delete: ");
-        System.out.println("[3] Back ");
+        System.out.println("[1] Archive: ");
+        System.out.println("[2] Restore: ");
+        System.out.println("[3] Permanently delete ");
+        System.out.println("[4] Back ");
         System.out.print("\nEnter your choice: ");
         return sc.nextInt();
         
-    }    
+    } 
 //    This is for DELETE CRUD Operation Soft Delete
-    public void displayArchiveDoctors(List <Doctor> doctors){
-        System.out.println("Archived Doctors: ");
-        for(Doctor doctor : doctors){
-            System.out.printf("ID: %d, Name: %s, Username: %s, Specialization: %s,License: %s , Contact: %s, Gender: %s, DOB: %s, Address: %s%n",
-                    doctor.getId(),doctor.getName(),doctor.getUsername(),doctor.getSpecialization(),doctor.getLicenseNumber(),doctor.getContactNumber(),
-                    doctor.getGender(),doctor.getDOB(),doctor.getAddress());
-     
-        }
+    public int getDoctorIdInp(String message){
+        System.out.print(message);
+        return sc.nextInt();
     }
-    public int[] getArchiveChoice(){
-        System.out.print("Enter Doctor ID to archive/restore: ");
-        int doctorId =sc.nextInt();
-        System.out.print("Enter 1 to Archive or 0 to Restore: ");
-        int choice =sc.nextInt();
-        return new int[] {doctorId, choice};
+
+    public int getRestoreChoice() {
+        System.out.println("\n[1] Restore a Doctor's record");
+        System.out.println("[2] Back");
+        System.out.print("Enter your choice: ");
+        return sc.nextInt();
     }
     
 }
