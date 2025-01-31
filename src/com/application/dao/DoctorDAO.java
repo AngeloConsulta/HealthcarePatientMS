@@ -7,6 +7,7 @@ package com.application.dao;
 import com.application.model.Doctor;
 import com.application.model.Patient;
 import com.application.util.DBConnection;
+import com.application.util.QueryConstant;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,15 +23,14 @@ import java.util.logging.Logger;
  *
  * @author Administrator
  */
-public class DoctorDAO{
+public class DoctorDAO implements QueryConstant {
 
      //This method is only accessible in Doctor's: This is needed to M
      public Doctor getDoctorLogin(String username , String password) {
-        String query = "SELECT * FROM tbldoctorinfo WHERE doc_username = ? AND doc_password = ?";
+       
         Doctor doctor = null;
-
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement stmt = con.prepareStatement(query)) {
+             PreparedStatement stmt = con.prepareStatement(DOC_LOGIN)) {
 
             stmt.setString(1, username);
             stmt.setString(2, password);
@@ -66,9 +66,8 @@ public class DoctorDAO{
      
     
     public boolean createAccount(Doctor doctor){ //This is for Creation of record by Admin
-        try (Connection con = DBConnection.getConnection()){
-            String query = "INSERT INTO tbldoctorinfo (doc_username, doc_password, doc_fullname, doc_specialization, doc_license_number, doc_contact_number, doc_gender, doc_dob, doc_address )VALUES(?,?,?,?,?,?,?,?,?) ";
-            PreparedStatement stmt = con.prepareStatement(query);
+        try (Connection con = DBConnection.getConnection()){       
+            PreparedStatement stmt = con.prepareStatement(DOC_CREATEACCOUNT);
             stmt.setString(1, doctor.getUsername());
             stmt.setString(2, doctor.getPassword());
             stmt.setString(3, doctor.getName());
@@ -87,10 +86,8 @@ public class DoctorDAO{
      }
 
      public boolean updateDoctor(Doctor doctor){
-          String query = "UPDATE tbldoctorinfo SET doc_username = ?, doc_fullname = ?, doc_specialization = ?, doc_license_number = ?, "
-                 + "doc_contact_number = ?, doc_gender = ?, doc_dob = ?, doc_address = ?, doc_availabilityStatus = ? WHERE doc_id = ?";
            try(Connection con = DBConnection.getConnection();
-                 PreparedStatement stmt = con.prepareStatement(query)){
+                 PreparedStatement stmt = con.prepareStatement(DOC_UPDATE)){
                stmt.setString(1, doctor.getUsername());
                stmt.setString(2, doctor.getName());
                stmt.setString(3, doctor.getSpecialization());
@@ -110,9 +107,9 @@ public class DoctorDAO{
      }
      //Soft Delete (Archive)
      public boolean softdDeletePatient(int id){
-        String query = "UPDATE tbldoctorinfo SET archived = 1 WHERE doc_id = ?";
+ 
         try (Connection con = DBConnection.getConnection();
-                PreparedStatement stmt = con.prepareStatement(query)){
+                PreparedStatement stmt = con.prepareStatement(DOC_ARCHIVE)){
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -124,9 +121,9 @@ public class DoctorDAO{
     }
     //Restore the Archived Patient
     public boolean restorePatient(int id){
-        String query = "UPDATE tbldoctorinfo SET archived = 0 WHERE doc_id =?";
+        
         try(Connection con = DBConnection.getConnection();
-                PreparedStatement stmt = con.prepareStatement(query)){
+                PreparedStatement stmt = con.prepareStatement(DOC_RESTORE)){
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -137,9 +134,9 @@ public class DoctorDAO{
     }
     //Hard Delete or Permanently delete
     public boolean hardDeletePatient(int id){
-        String query = "DELETE FROM tbldoctorinfo WHERE doc_id = ?";
+   
         try(Connection con = DBConnection.getConnection();
-                PreparedStatement stmt = con.prepareStatement(query)){
+                PreparedStatement stmt = con.prepareStatement(DOC_PERMANENTDELETE)){
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -152,9 +149,8 @@ public class DoctorDAO{
     //Get All the Active Doctor (Exclude Archive / SoftDeleted)
     public List<Doctor> getAllActiveDoctor(){
         List<Doctor> doctors = new ArrayList<>();
-        String query = "SELECT * FROM tbldoctorinfo WHERE archived = 0";
         try (Connection con = DBConnection.getConnection();
-                PreparedStatement stmt = con.prepareStatement(query);
+                PreparedStatement stmt = con.prepareStatement(DOC_VIEWACTIVEDOCTOR );
                 ResultSet rs = stmt.executeQuery() ){
             while(rs.next()){
                 Doctor doctor = mapResultSetToDoctor(rs);
@@ -170,9 +166,8 @@ public class DoctorDAO{
     // Get All Archived Doctor
     public List<Doctor> getArchivedDoctor() {
         List<Doctor> doctors = new ArrayList<>();
-        String query = "SELECT * FROM tbldoctorinfo WHERE archived = 1";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement stmt = con.prepareStatement(query);
+             PreparedStatement stmt = con.prepareStatement(DOC_VIEWARCHIVE);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Doctor doctor = mapResultSetToDoctor(rs);

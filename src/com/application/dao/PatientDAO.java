@@ -11,6 +11,7 @@ package com.application.dao;
 
 import com.application.model.Patient;
 import com.application.util.DBConnection;
+import com.application.util.QueryConstant;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,17 +25,17 @@ import java.util.List;
 import java.sql.Statement;
 
 
-public class PatientDAO extends DBConnection{
+public class PatientDAO extends DBConnection implements QueryConstant{
    
 
    
     
     public Patient getPatientLogin(String username , String password) {
-        String query = "SELECT * FROM tblpatientinfo WHERE pat_username = ? AND pat_password = ?";
+       
         Patient patient = null;
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement stmt = con.prepareStatement(query)) {
+             PreparedStatement stmt = con.prepareStatement(PAT_LOGIN)) {
 
             stmt.setString(1, username);
             stmt.setString(2, password);
@@ -69,10 +70,9 @@ public class PatientDAO extends DBConnection{
 
     
     public boolean updatePatientPersonalDetails(Patient patient) {
-    String query = "UPDATE tblpatientinfo SET  pat_contactnumber = ?, pat_address = ?, pat_emergency_contactname = ?, pat_emergency_contactno = ?, " +
-                   "pat_bloodtype = ?, pat_medicalconditions = ?, pat_medications = ?, pat_allergies = ? WHERE pat_id = ?";
+    
         try (Connection conn = DBConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query)) {
+            PreparedStatement stmt = conn.prepareStatement(PAT_PATIENTUPDATE)) {
         
             stmt.setString(1, patient.getContact_number());
             stmt.setString(2, patient.getAddress());
@@ -97,8 +97,7 @@ public class PatientDAO extends DBConnection{
     //This is for Admin Access side
     public boolean createAccount(Patient patient) {
         try (Connection con = DBConnection.getConnection()){
-            String query = "INSERT INTO tblpatientinfo (pat_username, pat_password, pat_fullname, pat_dob , pat_gender, pat_contactnumber, pat_address )VALUES(?,?,?,?,?,?,?) ";
-            PreparedStatement stmt = con.prepareStatement(query);
+            PreparedStatement stmt = con.prepareStatement(PAT_CREATE);
             stmt.setString(1, patient.getUsername());
             stmt.setString(2, patient.getPassword());
             stmt.setString(3, patient.getFull_name());
@@ -122,9 +121,9 @@ public class PatientDAO extends DBConnection{
     }
     
     public boolean updatePatient(Patient patient){
-         String query = "UPDATE tblpatientinfo SET pat_username = ?, pat_password = ?, pat_fullname = ?, pat_dob = ?, pat_gender = ?, pat_contactnumber = ?, pat_address = ? WHERE pat_id = ?";
+         
          try (Connection con = DBConnection.getConnection();
-              PreparedStatement stmt = con.prepareStatement(query)) {
+              PreparedStatement stmt = con.prepareStatement(PAT_ADMINUPDATE)) {
              
              stmt.setString(1, patient.getUsername());
              stmt.setString(2, patient.getPassword());
@@ -146,9 +145,9 @@ public class PatientDAO extends DBConnection{
     }
     //Soft Delete (Archive)
     public boolean softdDeletePatient(int id){
-        String query = "UPDATE tblpatientinfo SET archived = 1 WHERE pat_id = ?";
+        
         try (Connection con = DBConnection.getConnection();
-                PreparedStatement stmt = con.prepareStatement(query)){
+                PreparedStatement stmt = con.prepareStatement(PAT_ARCHIVE)){
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -162,9 +161,8 @@ public class PatientDAO extends DBConnection{
     }
     //Restore the Archived Patient
     public boolean restorePatient(int id){
-        String query = "UPDATE tblpatientinfo SET archived = 0 WHERE pat_id =?";
         try(Connection con = DBConnection.getConnection();
-                PreparedStatement stmt = con.prepareStatement(query)){
+                PreparedStatement stmt = con.prepareStatement(PAT_RESTORE)){
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -176,9 +174,9 @@ public class PatientDAO extends DBConnection{
     }
     //Hard Delete or Permanently delete
     public boolean hardDeletePatient(int id) {
-        String query = "DELETE FROM tblpatientinfo WHERE pat_id = ?";
+       
         try(Connection con = DBConnection.getConnection();
-                PreparedStatement stmt = con.prepareStatement(query)){
+                PreparedStatement stmt = con.prepareStatement(PAT_DELETION)){
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -192,9 +190,8 @@ public class PatientDAO extends DBConnection{
     //Get All the Active Patient (Exclude Archive / SoftDeleted)
     public List<Patient> getAllActivePatients() {
         List<Patient> patients = new ArrayList<>();
-        String query = "SELECT * FROM tblpatientinfo WHERE archived = 0";
         try (Connection con = DBConnection.getConnection();
-                PreparedStatement stmt = con.prepareStatement(query);
+                PreparedStatement stmt = con.prepareStatement(PAT_VIEWACTIVEPATIENT);
                 ResultSet rs = stmt.executeQuery() ){
             while(rs.next()){
                 Patient patient = mapResultSetToPatient(rs);
@@ -211,9 +208,8 @@ public class PatientDAO extends DBConnection{
     // Get All Archived Patients
     public List<Patient> getArchivedPatients()  {
         List<Patient> patients = new ArrayList<>();
-        String query = "SELECT * FROM tblpatientinfo WHERE archived = 1";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement stmt = con.prepareStatement(query);
+             PreparedStatement stmt = con.prepareStatement(PAT_VIEWARCHIVE);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Patient patient = mapResultSetToPatient(rs);

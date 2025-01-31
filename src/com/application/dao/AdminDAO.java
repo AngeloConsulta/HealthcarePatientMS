@@ -6,6 +6,7 @@ package com.application.dao;
 
 import com.application.model.Admin;
 import com.application.util.DBConnection;
+import com.application.util.QueryConstant;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,13 +18,12 @@ import java.util.logging.Logger;
  *
  * @author Administrator
  */
-public class AdminDAO{
+public class AdminDAO implements QueryConstant {
 
     
     public boolean verifyCredentials(Admin admin){
         try (Connection con = DBConnection.getConnection()){
-            String query = "SELECT * FROM tbladmininfo WHERE admin_username =? AND admin_password =? ";
-            PreparedStatement stmt = con.prepareStatement(query);
+            PreparedStatement stmt = con.prepareStatement(ADMIN_LOGIN);
             stmt.setString( 1, admin.getUsername());
             stmt.setString(2, admin.getPassword());
             ResultSet rs = stmt.executeQuery();
@@ -38,8 +38,7 @@ public class AdminDAO{
     }
     public boolean createAccount(Admin admin){
         try (Connection con = DBConnection.getConnection()){
-            String query = "INSERT INTO tbladmininfo (admin_username, admin_password, admin_fullname, admin_age, admin_gender)VALUES(?,?,?,?,?) ";
-            PreparedStatement stmt = con.prepareStatement(query);
+            PreparedStatement stmt = con.prepareStatement(ADMIN_CREATEACCOUNT);
             stmt.setString(1, admin.getUsername());
             stmt.setString(2, admin.getPassword());
             stmt.setString(3, admin.getName());

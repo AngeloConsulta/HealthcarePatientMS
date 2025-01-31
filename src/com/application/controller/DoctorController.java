@@ -160,7 +160,7 @@ public class DoctorController {
     }
     public void permanentlyDelete(){
         viewAllDoctor();
-        int patient_id = docview.getDoctorIdInp("Enter the ID of the patient to archive: ");
+        int patient_id = docview.getDoctorIdInp("Enter the ID of the patient to permanently delete: ");
         boolean success = docDAO.hardDeletePatient(patient_id);
         docview.displayMessage(success? "Patient record permanently deleted": "Failed to permanently delete");
     }

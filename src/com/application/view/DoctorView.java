@@ -7,6 +7,7 @@ package com.application.view;
 import com.application.model.Doctor;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -95,7 +96,7 @@ public class DoctorView {
         System.out.print("Enter Username: ");
         doctor.setUsername(sc.next());
         System.out.print("Enter Password: ");
-        doctor.setUsername(sc.next());
+        doctor.setPassword(sc.next());
         System.out.print("Enter Doctor's Name: ");
         doctor.setName(sc.next()+ sc.nextLine());
         System.out.print("Enter Specialization: ");
@@ -107,16 +108,21 @@ public class DoctorView {
         System.out.print("Gender: ");
         doctor.setGender(sc.next());
         LocalDate DOB = null;
-        while (DOB == null) {
+        LocalDate dateOfBirth = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        while (dateOfBirth == null) {
+            System.out.print("Enter Date of Birth (yyyy-mm-dd): ");
+            String input = sc.nextLine().trim();
+
             try {
-               System.out.print("Date of Birth (yyyy-mm-dd): ");
-               String dobInput = sc.nextLine().trim();
-               DOB = LocalDate.parse(dobInput, DateTimeFormatter.ISO_DATE);
-            } catch (Exception e) {
-                System.out.println("Invalid date format. Please enter in yyyy-mm-dd format."+ e);
+                dateOfBirth = LocalDate.parse(input, formatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format. Please enter in yyyy-mm-dd format.");
+            }
         }
-        }
-        doctor.setDOB(DOB);
+
+        System.out.println("Date of Birth: " + dateOfBirth);
         System.out.print("Enter Address: ");
         doctor.setAddress(sc.next()+ sc.nextLine());
 
