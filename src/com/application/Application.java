@@ -47,7 +47,7 @@ public class Application {
             default : 
                 System.out.println("Invalid choice. Please try again.");
                 mainMenu();
-        }
+            }
         }catch(Exception e){
              System.out.println("Invalid Input, Please input number only");
              mainMenu();

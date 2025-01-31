@@ -55,7 +55,7 @@ public class DoctorView {
     }
     
      public void displayDoctorDetails(Doctor doctor) {
-       
+
         System.out.println("Username: " + doctor.getUsername());
         System.out.println("Full Name: " + doctor.getName());
         System.out.println("Specialization: " + doctor.getSpecialization());

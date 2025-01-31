@@ -67,20 +67,10 @@ public class PatientView {
         System.out.println("Medical Conditions: " + patient.getMedical_conditions());
         System.out.println("Medications: " + patient.getMedications());
         System.out.println("Allergies: " + patient.getAllergies());
-        System.out.println("======================================");
+        System.out.println("==================================================");
+        
     }
-    public int getDoctorIdForAppointment(){
-        System.out.print("Enter Doctor ID to book an appointment: ");
-        return sc.nextInt();
-    }
-    public String getAppointmentdate(){
-        System.out.print("Enter Appointment Date (YYYY-MM-DD)(HRS:MIN): ");
-        return sc.next();
-    }
-    public String getAppointmentReason(){
-        System.out.print("Enter Reason for appointment: ");
-        return sc.nextLine();
-    }
+   
     public void displayMessage(String message){
         System.out.println(message);
     }

@@ -181,11 +181,11 @@ public class DoctorController {
                     break;
                 default:
                     docview.displayMessage("Invalid Choice");
-                    continue;
-            }
+                    app.mainMenu();
+               }
             }catch(Exception e){
                 System.out.println("Invalid Input, Please input number only");
-                continue;
+                app.mainMenu();
             }
             
         }
@@ -209,19 +209,19 @@ public class DoctorController {
                 int choice = docview.displayDashboard();
                 switch(choice){
                      case 1:
-                         docview.displayMessage("====== View Booking Appointment ====== ");
+                         docview.displayMessage("=========== View Booking Appointment =========== ");
                          showBookingAppointment();
                          break;
                      case 2:
-                         docview.displayMessage("====== Delete Appointment =======");
+                         docview.displayMessage("============ Delete Appointment =============");
                          deleteAppointment();
                          break;
                      case 3:
-                         docview.displayMessage("====== View Personal Details ======");
+                         docview.displayMessage("======= View Personal Details ========");
                          viewPersonalDetails(doctor);
                          break;
                      case 4:
-                          docview.displayMessage("===== Update for Availability Schedule ======");
+                          docview.displayMessage("========= Update for Availability Schedule ========");
                           updatePersonalDetails();
                      case 5:
                           docview.displayMessage("===== Logging out ===== ");
@@ -233,7 +233,8 @@ public class DoctorController {
                 }
             
             }catch (Exception e){
-                System.out.println("Invalid Input, Please input number only");
+                System.out.println("Invalid Input, Please input number only" + e);
+                continue;
             }
             
         }

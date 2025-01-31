@@ -26,6 +26,9 @@ public class PatientController {
     private final DoctorController Doctrol = new DoctorController();
     private final AdminController admControl = new AdminController();
     private Patient loggedInPatient;
+    
+    
+    
     public void managePatients(){
         while(true){
             int choice = ptview.getPatientManagementChoice(); // handle the option of CRUD Operation in Patient
@@ -125,7 +128,7 @@ public class PatientController {
                     managePatients();
                 }
             }catch(Exception e){
-                 System.out.println("e");
+                 System.out.println(e);
                  managePatients();
              }
            
@@ -168,11 +171,11 @@ public class PatientController {
                     break;
                 default:
                     ptview.displayMessage("Invalid Choice");
-                    continue;
+                    app.mainMenu();
             }
             }catch(Exception e){
                 System.out.println("Invalid Input, Please input number only");
-                continue;
+                app.mainMenu();
             }
         }
     }
@@ -198,7 +201,7 @@ public class PatientController {
                 int choice = ptview.displayDashboard();
             switch(choice){
                 case 1:
-                ptview.displayMessage("\n ====== Patient Personal Details =======");
+                ptview.displayMessage("\n============ Patient Personal Details ============");
                 viewPersonalDetails(patient);
                 break;
             case 2:
@@ -211,7 +214,7 @@ public class PatientController {
                 break;
             case 4:
                 ptview.displayMessage("===== You are booking an appointment ");
-                bookAppointment();
+//                bookAppointment();
             case 5:
                 System.exit(0);
                 break;
@@ -271,19 +274,19 @@ public class PatientController {
     public void viewAvailableDoctors() {
         Doctrol.viewAllDoctorByPatient();
     }
-    public void bookAppointment(){
-        int doctorId = ptview.getDoctorIdForAppointment();
-        String date = ptview.getAppointmentdate();
-        String reason = ptview.getAppointmentReason();
-        boolean success = ptDAO.bookAppointment(loggedInPatient.getId(), doctorId, date, reason);
-    
-        if (success){
-            ptview.displayMessage("Appointment book successfully! ");
-    
-        }else{
-            ptview.displayMessage("Failed to book appointment");
-        }
-    }
+//    public void bookAppointment(){
+//        int doctorId = ptview.getDoctorIdForAppointment();
+//        String date = ptview.getAppointmentdate();
+//        String reason = ptview.getAppointmentReason();
+//        boolean success = ptDAO.bookAppointment(loggedInPatient.getId(), doctorId, date, reason);
+//    
+//        if (success){
+//            ptview.displayMessage("Appointment book successfully! ");
+//    
+//        }else{
+//            ptview.displayMessage("Failed to book appointment");
+//        }
+//    }
     
 
 }

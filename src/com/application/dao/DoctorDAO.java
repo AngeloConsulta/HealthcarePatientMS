@@ -26,7 +26,7 @@ public class DoctorDAO{
 
      //This method is only accessible in Doctor's: This is needed to M
      public Doctor getDoctorLogin(String username , String password) {
-        String query = "SELECT * FROM doctor WHERE username = ? AND password = ?";
+        String query = "SELECT * FROM tbldoctorinfo WHERE doc_username = ? AND doc_password = ?";
         Doctor doctor = null;
 
         try (Connection con = DBConnection.getConnection();
@@ -38,17 +38,17 @@ public class DoctorDAO{
 
             if (rs.next()) {
                 doctor = new Doctor();
-                    doctor.setId(rs.getInt("id"));
-                    doctor.setUsername(rs.getString("username"));
-                    doctor.setPassword(rs.getString("password"));
-                    doctor.setName(rs.getString("name"));
-                    doctor.setSpecialization(rs.getString("specialization"));
-                    doctor.setLicenseNumber(rs.getString("licenseNumber"));
-                    doctor.setContactNumber(rs.getString("contactNumber"));
-                    doctor.setGender(rs.getString("gender"));
-                    doctor.setDOB(rs.getDate("DOB").toLocalDate());
-                    doctor.setAddress(rs.getString("address"));
-                    Date availabilityDate = rs.getDate("availabilityStatus");
+                    doctor.setId(rs.getInt("doc_id"));
+                    doctor.setUsername(rs.getString("doc_username"));
+                    doctor.setPassword(rs.getString("doc_password"));
+                    doctor.setName(rs.getString("doc_fullname"));
+                    doctor.setSpecialization(rs.getString("doc_specialization"));
+                    doctor.setLicenseNumber(rs.getString("doc_license_number"));
+                    doctor.setContactNumber(rs.getString("doc_contact_number"));
+                    doctor.setGender(rs.getString("doc_gender"));
+                    doctor.setDOB(rs.getDate("doc_dob").toLocalDate());
+                    doctor.setAddress(rs.getString("doc_address"));
+                    Date availabilityDate = rs.getDate("doc_availability_status");
             if (availabilityDate != null) {
                 doctor.setAvailabilityStatus(availabilityDate.toLocalDate());
             }
@@ -67,7 +67,7 @@ public class DoctorDAO{
     
     public boolean createAccount(Doctor doctor){ //This is for Creation of record by Admin
         try (Connection con = DBConnection.getConnection()){
-            String query = "INSERT INTO doctor (username, password, name, specialization, licenseNumber, contactNumber, gender, DOB, address )VALUES(?,?,?,?,?,?,?,?,?) ";
+            String query = "INSERT INTO tbldoctorinfo (doc_username, doc_password, doc_fullname, doc_specialization, doc_license_number, doc_contact_number, doc_gender, doc_dob, doc_address )VALUES(?,?,?,?,?,?,?,?,?) ";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, doctor.getUsername());
             stmt.setString(2, doctor.getPassword());
@@ -87,8 +87,8 @@ public class DoctorDAO{
      }
 
      public boolean updateDoctor(Doctor doctor){
-          String query = "UPDATE doctor SET username = ?, name = ?, specialization = ?, licenseNumber = ?, "
-                 + "contactNumber = ?, gender = ?, DOB = ?, address = ?, availabilityStatus = ? WHERE id = ?";
+          String query = "UPDATE tbldoctorinfo SET doc_username = ?, doc_fullname = ?, doc_specialization = ?, doc_license_number = ?, "
+                 + "doc_contact_number = ?, doc_gender = ?, doc_dob = ?, doc_address = ?, doc_availabilityStatus = ? WHERE doc_id = ?";
            try(Connection con = DBConnection.getConnection();
                  PreparedStatement stmt = con.prepareStatement(query)){
                stmt.setString(1, doctor.getUsername());
@@ -110,7 +110,7 @@ public class DoctorDAO{
      }
      //Soft Delete (Archive)
      public boolean softdDeletePatient(int id){
-        String query = "UPDATE doctor SET archived = 1 WHERE id = ?";
+        String query = "UPDATE tbldoctorinfo SET archived = 1 WHERE doc_id = ?";
         try (Connection con = DBConnection.getConnection();
                 PreparedStatement stmt = con.prepareStatement(query)){
             stmt.setInt(1, id);
@@ -124,7 +124,7 @@ public class DoctorDAO{
     }
     //Restore the Archived Patient
     public boolean restorePatient(int id){
-        String query = "UPDATE doctor SET archived = 0 WHERE id =?";
+        String query = "UPDATE tbldoctorinfo SET archived = 0 WHERE doc_id =?";
         try(Connection con = DBConnection.getConnection();
                 PreparedStatement stmt = con.prepareStatement(query)){
             stmt.setInt(1, id);
@@ -137,7 +137,7 @@ public class DoctorDAO{
     }
     //Hard Delete or Permanently delete
     public boolean hardDeletePatient(int id){
-        String query = "DELETE FROM doctor WHERE id = ?";
+        String query = "DELETE FROM tbldoctorinfo WHERE doc_id = ?";
         try(Connection con = DBConnection.getConnection();
                 PreparedStatement stmt = con.prepareStatement(query)){
             stmt.setInt(1, id);
@@ -152,7 +152,7 @@ public class DoctorDAO{
     //Get All the Active Doctor (Exclude Archive / SoftDeleted)
     public List<Doctor> getAllActiveDoctor(){
         List<Doctor> doctors = new ArrayList<>();
-        String query = "SELECT * FROM doctor WHERE archived = 0";
+        String query = "SELECT * FROM tbldoctorinfo WHERE archived = 0";
         try (Connection con = DBConnection.getConnection();
                 PreparedStatement stmt = con.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery() ){
@@ -170,7 +170,7 @@ public class DoctorDAO{
     // Get All Archived Doctor
     public List<Doctor> getArchivedDoctor() {
         List<Doctor> doctors = new ArrayList<>();
-        String query = "SELECT * FROM doctor WHERE archived = 1";
+        String query = "SELECT * FROM tbldoctorinfo WHERE archived = 1";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -187,17 +187,17 @@ public class DoctorDAO{
     // Helper method to map ResultSet to Doctor object
     private Doctor mapResultSetToDoctor(ResultSet rs) throws SQLException {
         Doctor doctor = new Doctor();
-        doctor.setId(rs.getInt("id"));
-        doctor.setUsername(rs.getString("username"));
-        doctor.setName(rs.getString("name"));
-        doctor.setSpecialization(rs.getString("specialization"));
-        doctor.setLicenseNumber(rs.getString("licenseNumber"));
-        doctor.setContactNumber(rs.getString("contactNumber"));
-        doctor.setGender(rs.getString("gender"));
-        Date dobsql = rs.getDate("DOB");
+        doctor.setId(rs.getInt("doc_id"));
+        doctor.setUsername(rs.getString("doc_username"));
+        doctor.setName(rs.getString("doc_fullname"));
+        doctor.setSpecialization(rs.getString("doc_specialization"));
+        doctor.setLicenseNumber(rs.getString("doc_license_number"));
+        doctor.setContactNumber(rs.getString("doc_contact_number"));
+        doctor.setGender(rs.getString("doc_gender"));
+        Date dobsql = rs.getDate("doc_dob");
         doctor.setDOB(dobsql !=null ? dobsql.toLocalDate(): null); // Convert java.sql.Date to LocalDate
-        doctor.setAddress(rs.getString("address"));
-        Date availsql = rs.getDate("availabilityStatus");
+        doctor.setAddress(rs.getString("doc_address"));
+        Date availsql = rs.getDate("doc_availability_status");
         doctor.setAvailabilityStatus(availsql !=null?availsql.toLocalDate(): null);
         return doctor;
     }

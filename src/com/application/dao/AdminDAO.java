@@ -22,7 +22,7 @@ public class AdminDAO{
     
     public boolean verifyCredentials(Admin admin){
         try (Connection con = DBConnection.getConnection()){
-            String query = "SELECT * FROM admins WHERE username =? AND password =? ";
+            String query = "SELECT * FROM tbladmininfo WHERE admin_username =? AND admin_password =? ";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString( 1, admin.getUsername());
             stmt.setString(2, admin.getPassword());
@@ -38,7 +38,7 @@ public class AdminDAO{
     }
     public boolean createAccount(Admin admin){
         try (Connection con = DBConnection.getConnection()){
-            String query = "INSERT INTO admins (username, password, name, age, gender)VALUES(?,?,?,?,?) ";
+            String query = "INSERT INTO tbladmininfo (admin_username, admin_password, admin_fullname, admin_age, admin_gender)VALUES(?,?,?,?,?) ";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, admin.getUsername());
             stmt.setString(2, admin.getPassword());
