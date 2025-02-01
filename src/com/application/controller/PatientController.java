@@ -138,24 +138,42 @@ public class PatientController {
         viewAllPatients();
         int patient_id =ptview.getPatientIdInp("Enter the ID of the patient to archive: ");
         boolean success =  ptDAO.softdDeletePatient(patient_id);
-        ptview.displayMessage(success ? "Patient archived successfully! ": "Failed to archived patient.");
+        if (success) {
+            System.out.println("Patient archived successfully!");
+            viewAllPatients(); // Show updated active patients after archiving
+        } else {
+           System.out.println("Failed to archive patient.");
+        }
     }
     public void restoreArchivePatient(){
        List<Patient> archivePatients = ptDAO.getArchivedPatients();
        ptview.displayPatients(archivePatients);
        
-       int choice = ptview.getArchiveRestoreChoice();
-       if(choice ==1){
+        int choice = ptview.getArchiveRestoreChoice();
+        if(choice ==1){
            int patient_id = ptview.getPatientIdInp("Enter the ID of patient to restore: ");
            boolean success = ptDAO.restorePatient(patient_id);
-           ptview.displayMessage(success ? "Patient restored successfully! ":"Failed to restore patient");
+            if (success){
+               ptview.displayMessage("Patient restored successfully! ");
+               viewAllPatients();
+      
+            }else{
+               ptview.displayMessage("Invalid choice! Please select 1 or 2");
+           }
        }
     }
+    
     public void permanentDelete(){
         viewAllPatients();
         int patient_id = ptview.getPatientIdInp("Enter the ID of the patient to archive: ");
         boolean success = ptDAO.hardDeletePatient(patient_id);
-        ptview.displayMessage(success? "Patient record permanently deleted": "Failed to permanently delete");
+        if (success) {
+            ptview.displayMessage("Patient record permanently deleted");
+            viewAllPatients(); // Show updated active patients after archiving
+        } else {
+            ptview.displayMessage("Failed to permanently delete");
+        }
+       
     }
     //This is for Patient Access
     public void handlePatientFlow(){
@@ -287,6 +305,8 @@ public class PatientController {
 //            ptview.displayMessage("Failed to book appointment");
 //        }
 //    }
+
+   
     
 
 }

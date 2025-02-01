@@ -20,6 +20,7 @@ import com.application.model.Patient;
 import com.application.view.AdminView;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class AdminController {
@@ -100,6 +101,9 @@ public class AdminController {
                     //call the doctorController or related functionality
                     break;
                 case 3:
+                    searchPerson();
+                    break;
+                case 4:
                     System.exit(0);
                     break;
                 default:
@@ -107,6 +111,17 @@ public class AdminController {
                     handleDashboard(); 
             }
         }
+    }
+    public void searchPerson(){
+        sc.nextLine();
+        System.out.print("Enter the Name or Username to Search: ");
+        String keyword = sc.nextLine().trim();
+        if(keyword.isEmpty()){
+            System.out.println("Please enter a valid search keyword");
+            return;
+        }
+        List<Object[]> results = adminDAO.searchPerson(keyword);
+        adminView.displaySearchResults(results);
     }
     private void  handlePatientManagement(){
         PatientController patientController = new PatientController();

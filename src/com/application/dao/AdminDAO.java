@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Administrator
  */
-public class AdminDAO implements QueryConstant {
+public class AdminDAO extends DBConnection implements QueryConstant {
 
     
     public boolean verifyCredentials(Admin admin){
@@ -53,5 +55,52 @@ public class AdminDAO implements QueryConstant {
     
            
     }
+    public List<Object[]> searchPerson(String keyword){
+        List<Object[]> results = new ArrayList<>();
+        
+        
+          try (Connection con = DBConnection.getConnection();
+              PreparedStatement stmtDoctor = con.prepareStatement(SEARCHDOCTOR);
+              PreparedStatement stmtPatient = con.prepareStatement(SEARCHPATIENT)){
+
+            //  Set parameters for both queries
+            stmtDoctor.setString(1, "%" + keyword + "%");
+            stmtDoctor.setString(2, "%" + keyword + "%");
+            stmtPatient.setString(1, "%" + keyword + "%");
+            stmtPatient.setString(2, "%" + keyword + "%");
+
+            // 🔹 Execute Doctor Query
+            ResultSet rsDoctor = stmtDoctor.executeQuery();
+            while (rsDoctor.next()) {
+                results.add(new Object[]{
+                        rsDoctor.getString("type"),
+                        rsDoctor.getInt("doc_id"),
+                        rsDoctor.getString("doc_username"),
+                        rsDoctor.getString("doc_fullname"),
+                        rsDoctor.getString("doc_specialization")
+                });
+            }
+
+            // 🔹 Execute Patient Query
+            ResultSet rsPatient = stmtPatient.executeQuery();
+            while (rsPatient.next()) {
+                results.add(new Object[]{
+                        rsPatient.getString("type"),
+                        rsPatient.getInt("pat_id"),
+                        rsPatient.getString("pat_username"),
+                        rsPatient.getString("pat_fullname"),
+                        rsPatient.getString("pat_medicalconditions")
+                });
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return results;
+    }
+
+        
+
     
 }

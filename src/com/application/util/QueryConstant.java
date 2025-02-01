@@ -37,4 +37,6 @@ public interface QueryConstant {
     //ADMIN 
     String ADMIN_LOGIN = "SELECT * FROM tbladmininfo WHERE admin_username =? AND admin_password =? ";
     String ADMIN_CREATEACCOUNT = "INSERT INTO tbladmininfo (admin_username, admin_password, admin_fullname, admin_age, admin_gender)VALUES(?,?,?,?,?) ";
+    String SEARCHDOCTOR = "SELECT 'Doctor' AS type, doc_id, doc_username, doc_fullname, doc_specialization FROM tbldoctorinfo WHERE doc_fullname LIKE ? OR doc_username LIKE ?";
+    String SEARCHPATIENT = "SELECT 'Patient' AS type, pat_id, pat_username, pat_fullname, pat_medicalconditions FROM tblpatientinfo WHERE pat_fullname LIKE ? OR pat_username LIKE ?";
 }

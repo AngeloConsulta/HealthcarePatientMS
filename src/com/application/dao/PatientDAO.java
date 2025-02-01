@@ -172,6 +172,7 @@ public class PatientDAO extends DBConnection implements QueryConstant{
         }
        
     }
+
     //Hard Delete or Permanently delete
     public boolean hardDeletePatient(int id) {
        

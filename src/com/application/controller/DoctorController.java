@@ -145,7 +145,12 @@ public class DoctorController {
         viewAllDoctor();
         int id = docview.getDoctorIdInp("Enter the ID of the patient to archive: ");
         boolean success =  docDAO.softdDeletePatient(id);
-        docview.displayMessage(success ? "Patient archived successfully! ": "Failed to archived patient.");
+        if (success){
+            docview.displayMessage( "Patient archived successfully! ");
+            viewAllDoctor();
+        }else{
+            docview.displayMessage("Failed to archived patient.");
+        }
     }
     public void restoreArchiveDoctor(){
        List<Doctor> archiveDoctor = docDAO.getArchivedDoctor();
@@ -155,14 +160,24 @@ public class DoctorController {
        if(choice ==1){
            int patient_id = docview.getDoctorIdInp("Enter the ID of patient to restore: ");
            boolean success = docDAO.restorePatient(patient_id);
-           docview.displayMessage(success ? "Patient restored successfully! ":"Failed to restore patient");
+           if (success){
+               docview.displayMessage( "Patient restored successfully! ");
+               viewAllDoctor();
+           }else{
+               docview.displayMessage("Failed to restore patient");
+           }
        }
     }
     public void permanentlyDelete(){
         viewAllDoctor();
         int patient_id = docview.getDoctorIdInp("Enter the ID of the patient to permanently delete: ");
         boolean success = docDAO.hardDeletePatient(patient_id);
-        docview.displayMessage(success? "Patient record permanently deleted": "Failed to permanently delete");
+        if (success){
+            docview.displayMessage("Patient record permanently deleted");
+            viewAllDoctor();
+        }else{
+            docview.displayMessage( "Failed to permanently delete");
+        }
     }
     
         

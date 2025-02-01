@@ -6,6 +6,7 @@ package com.application.view;
 
 import java.util.Scanner;
 import com.application.model.Admin;
+import java.util.List;
 
 /**
  *
@@ -59,12 +60,28 @@ public class AdminView {
         System.out.println("\nWelcome to the Admin Dashboard");
         System.out.println("[1] Manage Patients Record Information");
         System.out.println("[2] Manage Doctors Information");
-        System.out.println("[3] Logout");
+        System.out.println("[3] Search Patient or Doctor");
+        System.out.println("[4] Logout");
         System.out.print("\nEnter your choice: ");
         int choice = sc.nextInt();
         sc.nextLine();
         return choice;
        
+    }
+    public void displaySearchResults(List<Object[]> results){
+         if (results.isEmpty()) {
+            System.out.println("No results found.");
+        } else {
+            System.out.println("\nSearch Results:");
+            System.out.printf("%-10s | %-5s | %-15s | %-25s | %-20s\n",
+                    "Type", "ID", "Username", "Name", "Extra Info");
+            System.out.println("-------------------------------------------------------------------------------");
+
+            for (Object[] data : results) {
+                System.out.printf("%-10s | %-5d | %-15s | %-25s | %-20s\n",
+                        data[0], data[1], data[2], data[3], data[4]);
+            }
+        }
     }
     public int getchoice(){
         int choice = sc.nextInt();
