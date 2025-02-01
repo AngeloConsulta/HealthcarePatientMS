@@ -5,10 +5,11 @@
 package com.application.controller;
 
 import com.application.Application;
-import com.application.dao.DoctorDAO;
+
 import com.application.model.Doctor;
 import com.application.view.DoctorView;
 import com.application.controller.AdminController;
+import com.application.daoimpl.DoctorDAOIMPL;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -21,12 +22,14 @@ import java.util.List;
  */
 public class DoctorController {
     private final DoctorView docview = new DoctorView();
-    private final DoctorDAO docDAO = new DoctorDAO();
+    private final DoctorDAOIMPL docDAO = new DoctorDAOIMPL();
     private final Application app = new Application();
     private final AdminController admControl = new AdminController();
+  
     
     public void manageDoctors(){
          while(true){
+            try{
             int choice = docview.getDoctorManagementChoice();
             switch (choice){
                 case 1:
@@ -45,7 +48,12 @@ public class DoctorController {
                     admControl.handleDashboard();
                     return;
                 default:
-                    docview.displayMessage("Invalid Choice");
+                    docview.displayMessage("Invalid Choice, Please try again");
+                    admControl.handleDashboard();
+            }
+            }catch(Exception e){
+                docview.displayMessage("Invalid Input, Please input number only");
+                admControl.handleDashboard();
             }
         }
     }
@@ -63,10 +71,10 @@ public class DoctorController {
         docview.displayDoctorTable(doc);
     }
     //This is for the Access of Doctor
-    public void viewAllDoctorByPatient(){
-        List<Doctor> doc = docDAO.getAllActiveDoctor();
-        docview.viewAllDoctorForPatient(doc);
-    }
+//    public void viewAllDoctorByPatient(){
+//        List<Doctor> doc = docDAO.getAllActiveDoctor();
+//        docview.viewAllDoctorForPatient(doc);
+//    }
     //Update CRUD API
     private void updateDoctor(){
     // Display existing doctors
@@ -96,7 +104,7 @@ public class DoctorController {
     String newGender = docview.getInputOrDefault("Gender", doctor.getGender());
     LocalDate newDOB = docview.getDateInputOrDefault("DOB (YYYY-MM-DD)", doctor.getDOB());
     String newAddress = docview.getInputOrDefault("Address", doctor.getAddress());
-    LocalDate newAvaildate = docview.getDateInputOrDefault("Availability Status (YYYY-MM-DD)", doctor.getAvailabilityStatus());
+   
     
     //Set the Updated Values
      doctor.setUsername( newUsername);
@@ -107,7 +115,7 @@ public class DoctorController {
      doctor.setGender(newGender);
      doctor.setDOB(newDOB );
      doctor.setAddress(newAddress);
-     doctor.setAvailabilityStatus( newAvaildate );
+   
     // Update the doctor in the database
     boolean success = docDAO.updateDoctor(doctor);
     if (success) {
@@ -120,6 +128,7 @@ public class DoctorController {
     //Choice for Soft delete and hard delete
     private void deleteDocChoice(){
         while (true){
+            try{
             int choice = docview.displayDocDelChoice();
             switch(choice){
                 case 1:
@@ -137,16 +146,20 @@ public class DoctorController {
                 default:
                     docview.displayMessage("Invalid Choice. Please Try again");
                     manageDoctors();
-                    
+                  
+            }
+            }catch(Exception e){
+                docview.displayMessage("Invalid Input, Please input number only");
+                manageDoctors();
             }
         }
     }
      public void archiveDeleteDoctor(){
         viewAllDoctor();
-        int id = docview.getDoctorIdInp("Enter the ID of the patient to archive: ");
-        boolean success =  docDAO.softdDeletePatient(id);
+        int id = docview.getDoctorIdInp("Enter the ID of the doctor to archive: ");
+        boolean success =  docDAO.softdDeleteDoctor(id);
         if (success){
-            docview.displayMessage( "Patient archived successfully! ");
+            docview.displayMessage( "Doctor archived successfully! ");
             viewAllDoctor();
         }else{
             docview.displayMessage("Failed to archived patient.");
@@ -159,21 +172,21 @@ public class DoctorController {
        int choice = docview.getRestoreChoice();
        if(choice ==1){
            int patient_id = docview.getDoctorIdInp("Enter the ID of patient to restore: ");
-           boolean success = docDAO.restorePatient(patient_id);
+           boolean success = docDAO.restoreDoctor(choice);
            if (success){
-               docview.displayMessage( "Patient restored successfully! ");
+               docview.displayMessage( "Doctor's Record restored successfully! ");
                viewAllDoctor();
            }else{
-               docview.displayMessage("Failed to restore patient");
+               docview.displayMessage("Failed to restore Doctor's record");
            }
        }
     }
     public void permanentlyDelete(){
         viewAllDoctor();
-        int patient_id = docview.getDoctorIdInp("Enter the ID of the patient to permanently delete: ");
-        boolean success = docDAO.hardDeletePatient(patient_id);
+        int doc_id = docview.getDoctorIdInp("Enter the ID of the patient to permanently delete: ");
+        boolean success = docDAO.hardDeleteDoctor(doc_id);
         if (success){
-            docview.displayMessage("Patient record permanently deleted");
+            docview.displayMessage("Doctor record permanently deleted");
             viewAllDoctor();
         }else{
             docview.displayMessage( "Failed to permanently delete");
@@ -186,7 +199,7 @@ public class DoctorController {
      public void handleDoctorFlow(){
         while(true){
             try{
-                int choice = docview.handleLoginDoctor();
+            int choice = docview.handleLoginDoctor();
             switch(choice){
                 case 1:
                     loginDoctor();
@@ -210,7 +223,7 @@ public class DoctorController {
         Doctor doc =docview.displayLoginPrompt();
         Doctor doctor =docDAO.getDoctorLogin(doc.getUsername(), doc.getPassword());
         if (doctor != null){
-            docview.displayMessage("\nLogin Successfully. Welcome, "+ doctor.getUsername()+ " !");
+            docview.displayMessage("\nLogin Successfully. Welcome, Dr. "+ doctor.getUsername()+ " !");
             displayDashboard(doctor);
         }else{
             docview.displayMessage("Invalid Credentials");
@@ -236,11 +249,13 @@ public class DoctorController {
                          viewPersonalDetails(doctor);
                          break;
                      case 4:
-                          docview.displayMessage("========= Update for Availability Schedule ========");
-                          updatePersonalDetails();
+                          docview.displayMessage("========= Add Schedule ========");
+                          addSchedule(doctor);
+                          break;
                      case 5:
                           docview.displayMessage("===== Logging out ===== ");
                           System.exit(0);
+                          break;
                      default:
                           docview.displayMessage("Invalid option. Try Again");
                           displayDashboard(doctor);
@@ -248,8 +263,8 @@ public class DoctorController {
                 }
             
             }catch (Exception e){
-                System.out.println("Invalid Input, Please input number only" + e);
-                continue;
+                System.out.println("Invalid Input, Please input number only");
+                displayDashboard(doctor);
             }
             
         }
@@ -265,8 +280,17 @@ public class DoctorController {
     public void viewPersonalDetails(Doctor doctor){
         docview.displayDoctorDetails(doctor);
     }
-    public void updatePersonalDetails(){
+    public void addSchedule(Doctor doctor ) {
+        Doctor doctorWithSched = docview.addSchedule(doctor);
         
+//        Doctor loggedInDoctor = docview.addSchedule();
+        boolean result = docDAO.addSchedule(doctorWithSched);
+        if (result) {
+            docview.showSuccessMessage("Schedule successfully added for Dr. " + doctor.getName());
+        } else {
+            docview.showErrorMessage("Failed to add schedule.");
+        }
+
     }
    
 }

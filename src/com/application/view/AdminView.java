@@ -16,6 +16,16 @@ public class AdminView {
     private Scanner sc = new Scanner(System.in);
     
     
+    public int handleAdminLogin(){
+        System.out.println("\nAdmin Dashboard System");
+        System.out.println("\n[1]  Login");
+        System.out.println("[2]  Back to Main Menu");
+        System.out.print("\nEnter your choice: ");
+        int choice = sc.nextInt();
+        sc.nextLine();
+        return choice;
+    }
+    
     
     public void showWelcomeMessage(){
         System.out.println("Welcome to the Healthcare Patient Management System");
@@ -28,24 +38,24 @@ public class AdminView {
         System.out.print("Enter your choice: ");
         return sc.nextInt();
     }
-    public Admin getAdminDetails(){
-        System.out.println("\nRegister Admin:");
-        System.out.print("Enter Username: ");
-        String username = sc.nextLine();
-        System.out.print("Enter Password: ");
-        String password = sc.nextLine();
-        System.out.print("Enter Name: ");
-        String name = sc.nextLine();
-        System.out.print("Enter Age: ");
-        int age = sc.nextInt();
-        sc.nextLine(); // Consume the newline
-        System.out.print("Enter Gender: ");
-        String gender = sc.nextLine();
-
-        return new Admin(username, password, name, age, gender);
-      
-        
-    } 
+//    public Admin getAdminDetails(){
+//        System.out.println("\nRegister Admin:");
+//        System.out.print("Enter Username: ");
+//        String username = sc.nextLine();
+//        System.out.print("Enter Password: ");
+//        String password = sc.nextLine();
+//        System.out.print("Enter Name: ");
+//        String name = sc.nextLine();
+//        System.out.print("Enter Age: ");
+//        int age = sc.nextInt();
+//        sc.nextLine(); // Consume the newline
+//        System.out.print("Enter Gender: ");
+//        String gender = sc.nextLine();
+//
+//        return new Admin(username, password, name, age, gender);
+//      
+//        
+//    } 
     public Admin getLoginDetails() {
         System.out.println("\nAdmin Login:");
         System.out.print("Enter Username: ");

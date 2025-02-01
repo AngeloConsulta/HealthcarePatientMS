@@ -16,25 +16,25 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
 
-public class DBConnection {
-    private static final String DBName = "healthcare";
+public abstract class DBConnection {
+
+    private static final String DBName = "dbhpdms";
     private static final String URL = "jdbc:mysql://localhost:3306/" + DBName;
     private static final String USER = "root";
     private static final String PASSWORD = "";
+    private final static String DRIVER = "com.mysql.jdbc.Driver";
     public Connection con;
     public Statement state;
     public ResultSet rs;
     public PreparedStatement stmt;
 
-    public static Connection getConnection() {
+    public void connection() {
         try {
-            return DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (SQLException e) {
-             e.printStackTrace();
-            throw new RuntimeException("Failed to connect to the database.");
+//             Class.forName(DRIVER);
+            con = DriverManager.getConnection(URL, USER, PASSWORD);
+        }catch (SQLException e) {
+            System.out.println(e);
         }
-        
-           
-    }
-    
+       }
 }
+

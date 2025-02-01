@@ -5,9 +5,9 @@
 package com.application.controller;
 
 import com.application.Application;
-import com.application.dao.DoctorDAO;
-import com.application.dao.PatientDAO;
-import com.application.model.Doctor;
+
+import com.application.daoimpl.PatientDAOIMPL;
+
 import com.application.model.Patient;
 import com.application.view.PatientView;
 import java.util.List;
@@ -21,16 +21,17 @@ import java.util.List;
 public class PatientController {
    
     private final PatientView ptview = new PatientView();
-    private final PatientDAO ptDAO = new PatientDAO();
+    private final PatientDAOIMPL ptDAO = new PatientDAOIMPL();
     private final Application app = new Application();
     private final DoctorController Doctrol = new DoctorController();
     private final AdminController admControl = new AdminController();
-    private Patient loggedInPatient;
+   
     
     
     
     public void managePatients(){
         while(true){
+            try{
             int choice = ptview.getPatientManagementChoice(); // handle the option of CRUD Operation in Patient
             switch (choice){
                 case 1:
@@ -49,7 +50,12 @@ public class PatientController {
                     admControl.handleDashboard();
                     return;
                 default:
-                    ptview.displayMessage("Invalid Choice");
+                    ptview.displayMessage("Invalid Choice , Please try again");
+                    admControl.handleDashboard();
+            }
+            }catch(Exception e){
+                ptview.displayMessage("Invalid Input, Please input number only");
+                admControl.handleDashboard();
             }
         }
     }
@@ -188,7 +194,7 @@ public class PatientController {
                     app.mainMenu();
                     break;
                 default:
-                    ptview.displayMessage("Invalid Choice");
+                    ptview.displayMessage("Invalid Choice,  Please try again");
                     app.mainMenu();
             }
             }catch(Exception e){
@@ -217,36 +223,42 @@ public class PatientController {
         while(true){
             try{
                 int choice = ptview.displayDashboard();
-            switch(choice){
-                case 1:
-                ptview.displayMessage("\n============ Patient Personal Details ============");
-                viewPersonalDetails(patient);
-                break;
-            case 2:
-                ptview.displayMessage("\n ======= Update Patient Personal Information =======");
-                updatePatientInfo(patient);
-                break;
-            case 3:
-                ptview.displayMessage("======= Viewing Available Doctor =======");
-                viewAvailableDoctors();
-                break;
-            case 4:
-                ptview.displayMessage("===== You are booking an appointment ");
-//                bookAppointment();
-            case 5:
-                System.exit(0);
-                break;
-                        
-            case 6:
-                ptview.displayMessage("Logging out..");
-                System.exit(0);           
-            default:
-                ptview.displayMessage("Invalid option. Try Again");
-                displayDashboard(patient);
-            
-            }
-            }catch(Exception e){
                 
+                switch(choice){
+                    
+                    case 1:
+                        
+                        ptview.displayMessage("\n============ Patient Personal Details ============");
+                        viewPersonalDetails(patient);
+                        break;
+                    case 2:
+                        ptview.displayMessage("\n ======= Update Patient Personal Information =======");
+                        updatePatientInfo(patient);
+                        break;
+                    case 3:
+                        ptview.displayMessage("======= Viewing Available Doctor =======");
+//                      viewAvailableDoctors();
+                        break;
+                    case 4:
+                        ptview.displayMessage("===== You are booking an appointment ");
+//                      bookAppointment();
+                        break;
+                    
+                    case 5:
+                        System.exit(0);
+                        break;
+                        
+                    case 6:
+                        ptview.displayMessage("Logging out..");
+                        System.exit(0);           
+                    default:
+                        ptview.displayMessage("Invalid option. Try Again");
+                        displayDashboard(patient);
+            
+                }
+            }catch(Exception e){
+                ptview.displayMessage("Invalid Input. Please input number only");
+                displayDashboard(patient);
             }
             
         }
@@ -287,11 +299,42 @@ public class PatientController {
         ptview.displayMessage("Failed to update personal information. Please try again.");
     }
     }
+    public void bookAppointment(Patient patient) {
+    List<Doctor> availableSchedules = doctorDAO.getAvailableSchedules();
     
-    
-    public void viewAvailableDoctors() {
-        Doctrol.viewAllDoctorByPatient();
+    if (availableSchedules.isEmpty()) {
+        System.out.println("No schedules available. Please try again later.");
+        return;
     }
+
+    displayAvailableSchedules(availableSchedules); //This is an error need ,odification
+
+        System.out.print("Enter Schedule ID to book: ");
+        int scheduleId = sc.nextInt();
+        sc.nextLine();  // Consume newline
+
+        Doctor selectedDoctor = availableSchedules.stream()
+            .filter(d -> d.getSchedule_id() == scheduleId)
+            .findFirst()
+            .orElse(null);
+
+        if (selectedDoctor == null) {
+            System.out.println("Invalid Schedule ID! Please try again.");
+            return;
+        }
+
+        boolean success = appointmentDAO.addAppointment(patient.getId(), scheduleId);
+    
+        if (success) {
+        System.out.println("\nAppointment successfully booked with Dr. " + selectedDoctor.getName());
+        } else {
+        System.out.println("Failed to book appointment.");
+    }
+    }
+    
+//    public void viewAvailableDoctors() {
+//        Doctrol.viewAllDoctorByPatient();
+//    }
 //    public void bookAppointment(){
 //        int doctorId = ptview.getDoctorIdForAppointment();
 //        String date = ptview.getAppointmentdate();

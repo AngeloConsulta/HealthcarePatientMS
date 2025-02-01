@@ -12,7 +12,7 @@ public interface QueryConstant {
      
     //DOCTOR QUERY
     String DOC_UPDATE = "UPDATE tbldoctorinfo SET doc_username = ?, doc_fullname = ?, doc_specialization = ?, doc_license_number = ?, "
-                 + "doc_contact_number = ?, doc_gender = ?, doc_dob = ?, doc_address = ?, doc_availabilityStatus = ? WHERE doc_id = ?";//ADMIN ACCESS FOR UPDATE
+                 + "doc_contact_number = ?, doc_gender = ?, doc_dob = ?, doc_address = ? = ? WHERE doc_id = ?";//ADMIN ACCESS FOR UPDATE
     String DOC_LOGIN = "SELECT * FROM tbldoctorinfo WHERE doc_username = ? AND doc_password = ?";//Doctor Login 
     String DOC_CREATEACCOUNT = "INSERT INTO tbldoctorinfo (doc_username, doc_password, doc_fullname, doc_specialization, doc_license_number, doc_contact_number, doc_gender, doc_dob, doc_address )VALUES(?,?,?,?,?,?,?,?,?) "; //ADMIN ACCESS FOR CREATE ACCOUNT
     String DOC_ARCHIVE = "UPDATE tbldoctorinfo SET archived = 1 WHERE doc_id = ?"; //ADMIN ACCESS FOR ARCHIVING DOCTOR DATA

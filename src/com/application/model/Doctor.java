@@ -4,7 +4,9 @@
  */
 package com.application.model;
 
+import java.sql.Time;
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  *
@@ -21,7 +23,36 @@ public class Doctor {
     private String licenseNumber;
     private String gender;
     private LocalDate DOB;
-    private LocalDate availabilityStatus;
+    private Date schedDate;
+    private Time schedTime;
+    private int schedule_id;
+    private int toggle;
+
+    public Doctor(int id, String name, Date schedDate, Time schedTime) {
+        this.id = id;
+        this.name = name;
+        this.schedDate = schedDate;
+        this.schedTime = schedTime;
+    }
+
+        
+    public Doctor(int id, Date schedDate, Time schedTime) {
+            this.id = id;
+            this.schedDate = schedDate;
+            this.schedTime = schedTime;
+    }
+
+    public Doctor(int id, String name, String specialization, Date schedDate, Time schedTime, int schedule_id) {
+        this.id = id;
+        this.name = name;
+        this.specialization = specialization;
+        this.schedDate = schedDate;
+        this.schedTime = schedTime;
+        this.schedule_id = schedule_id;
+    }
+    
+    
+    
 
     public Doctor(String username, String password, String name, String specialization, String contactNumber, String address, String licenseNumber, String gender, LocalDate DOB) {
             this.username = username;
@@ -41,7 +72,7 @@ public class Doctor {
     }
     
 
-    public Doctor(int id, String username, String password, String name, String specialization, String contactNumber, String address, String licenseNumber, String gender, LocalDate DOB, LocalDate availabilityStatus) {
+    public Doctor(int id, String username, String password, String name, String specialization, String contactNumber, String address, String licenseNumber, String gender, LocalDate DOB) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -52,7 +83,7 @@ public class Doctor {
         this.licenseNumber = licenseNumber;
         this.gender = gender;
         this.DOB = DOB;
-        this.availabilityStatus = availabilityStatus;
+    
     }
 
     public int getId() {
@@ -135,13 +166,39 @@ public class Doctor {
         this.DOB = DOB;
     }
 
-    public LocalDate getAvailabilityStatus() {
-        return availabilityStatus;
+    public Date getSchedDate() {
+        return schedDate;
     }
 
-    public void setAvailabilityStatus(LocalDate availabilityStatus) {
-        this.availabilityStatus = availabilityStatus;
+    public void setSchedDate(Date schedDate) {
+        this.schedDate = schedDate;
     }
+
+    public Time getSchedTime() {
+        return schedTime;
+    }
+
+    public void setSchedTime(Time schedTime) {
+        this.schedTime = schedTime;
+    }
+
+    public int getSchedule_id() {
+        return schedule_id;
+    }
+
+    public void setSchedule_id(int schedule_id) {
+        this.schedule_id = schedule_id;
+    }
+
+    public int getToggle() {
+        return toggle;
+    }
+
+    public void setToggle(int toggle) {
+        this.toggle = toggle;
+    }
+
+   
     
 
     @Override

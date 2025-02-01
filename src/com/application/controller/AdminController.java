@@ -13,7 +13,7 @@ package com.application.controller;
  * @author Administrator
  */
 import com.application.Application;
-import com.application.dao.AdminDAO;
+import com.application.daoimpl.AdminDAOIMPL;
 import com.application.model.Admin;
 import com.application.model.Doctor;
 import com.application.model.Patient;
@@ -26,7 +26,7 @@ import java.util.List;
 public class AdminController {
     private final Application app = new Application();
     private final AdminView adminView = new AdminView();
-    private final AdminDAO adminDAO = new AdminDAO();
+    private final AdminDAOIMPL adminDAO = new AdminDAOIMPL();
     private final ArrayList<Admin> admins = new ArrayList<>();
     private final ArrayList<Patient> patients = new ArrayList<>();
     private final ArrayList<Doctor> doctors = new ArrayList<>();
@@ -35,46 +35,31 @@ public class AdminController {
     
     
     public void handleAdminFlow(){
-        System.out.println("\nAdmin Dashboard System");
-        System.out.println("[1]  Register");
-        System.out.println("[2]  Login");
-        System.out.println("[3]  Back to Main Menu");
-        System.out.print("\nEnter your choice: ");
+        while(true){
+       
 //        int choice = sc.nextInt();
         
         try{
-            int choice =sc.nextInt();
+            int choice = adminView.handleAdminLogin();
             switch(choice){
                 case 1 :
-                    registerAdmin();
-                    break;
-                case 2 :
                     loginAdmin();
                     break;
-                case 3:
+                case 2 :
                     app.mainMenu();
+                    break;              
                 default :
                     adminView.displayMessage("Invalid choice, Please try again" );
-                    handleAdminFlow();
+                    app.mainMenu();
             }
             
         }catch(Exception e){
              System.out.println("Invalid Input, Please input number only");
              app.mainMenu();
         } 
-    }
-    public void registerAdmin(){
-        Admin admin = adminView.getAdminDetails();
-        boolean isRegistered = adminDAO.createAccount(admin);
-        
-        if(isRegistered){
-            adminView.displayMessage("Admin Registered Successfully");
-            handleAdminFlow();
-        }else{
-            adminView.displayMessage("Registration Failed. Try again");
-             handleAdminFlow();
         }
     }
+
     public void loginAdmin(){ ///Logging In of Admin
         Admin admin =adminView.getLoginDetails();
         boolean isAuthenticated = adminDAO.verifyCredentials(admin);
@@ -89,6 +74,7 @@ public class AdminController {
     }
     public void handleDashboard(){
         while(true){
+            try{
      
             int choice = adminView.getAdminDashboardChoice();
             switch(choice){
@@ -108,7 +94,11 @@ public class AdminController {
                     break;
                 default:
                     adminView.displayMessage("Invalid Choice. Try Again");
-                    handleDashboard(); 
+                    handleDashboard();
+            }
+            }catch(Exception e){
+                adminView.displayMessage("Invalid Input. Please Input Number only");
+                handleDashboard();
             }
         }
     }
