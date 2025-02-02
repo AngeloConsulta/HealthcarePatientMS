@@ -8,6 +8,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.util.Date;
 
+
 /**
  *
  * @author Administrator
@@ -26,7 +27,12 @@ public class Doctor {
     private Date schedDate;
     private Time schedTime;
     private int schedule_id;
+    private int app_id;
     private int toggle;
+    private int pat_id;
+    private String pat_name;
+    private String reason;
+    
 
     public Doctor(int id, String name, Date schedDate, Time schedTime) {
         this.id = id;
@@ -53,6 +59,7 @@ public class Doctor {
     
     
     
+    
 
     public Doctor(String username, String password, String name, String specialization, String contactNumber, String address, String licenseNumber, String gender, LocalDate DOB) {
             this.username = username;
@@ -68,6 +75,17 @@ public class Doctor {
     
     }
 
+    public Doctor(int app_id, String pat_name, Date schedDate, Time schedTime, String reason) {
+        this.app_id = app_id;
+        this.pat_name = pat_name;
+        this.schedDate = schedDate;
+        this.schedTime = schedTime;
+        this.reason = reason;
+        
+       
+        
+    }
+        
     public Doctor() {
     }
     
@@ -198,6 +216,38 @@ public class Doctor {
         this.toggle = toggle;
     }
 
+    public int getPat_id() {
+        return pat_id;
+    }
+
+    public void setPat_id(int pat_id) {
+        this.pat_id = pat_id;
+    }
+
+    public String getPat_name() {
+        return pat_name;
+    }
+
+    public void setPat_name(String pat_name) {
+        this.pat_name = pat_name;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public int getApp_id() {
+        return app_id;
+    }
+
+    public void setApp_id(int app_id) {
+        this.app_id = app_id;
+    }
+    
    
     
 

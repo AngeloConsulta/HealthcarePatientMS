@@ -21,4 +21,5 @@ public interface PatientDAO {
     public boolean hardDeletePatient(int id);
     public List<Patient> getAllActivePatients();
     public List<Patient> getArchivedPatients();
+    public boolean bookAppointment(Patient patient);
 }

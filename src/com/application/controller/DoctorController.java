@@ -11,6 +11,7 @@ import com.application.view.DoctorView;
 import com.application.controller.AdminController;
 import com.application.daoimpl.DoctorDAOIMPL;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -96,24 +97,13 @@ public class DoctorController {
     
     // Get updated details from the user
     docview.displayMessage("Enter new details for the doctor (leave blank to keep current values):");
-    String newUsername =docview.getInputOrDefault("Username", doctor.getUsername());
-    String newName = docview.getInputOrDefault("Name", doctor.getName());
-    String newSpecialization = docview.getInputOrDefault("Specialization", doctor.getSpecialization());
-    String newLicenseNumber=docview.getInputOrDefault("License Number", doctor.getLicenseNumber());
+
     String newContactNumber = docview.getInputOrDefault("Contact Number", doctor.getContactNumber());
-    String newGender = docview.getInputOrDefault("Gender", doctor.getGender());
-    LocalDate newDOB = docview.getDateInputOrDefault("DOB (YYYY-MM-DD)", doctor.getDOB());
     String newAddress = docview.getInputOrDefault("Address", doctor.getAddress());
    
     
     //Set the Updated Values
-     doctor.setUsername( newUsername);
-     doctor.setName(newName);
-     doctor.setSpecialization(newSpecialization);
-     doctor.setLicenseNumber(newLicenseNumber);
      doctor.setContactNumber( newContactNumber);
-     doctor.setGender(newGender);
-     doctor.setDOB(newDOB );
      doctor.setAddress(newAddress);
    
     // Update the doctor in the database
@@ -171,8 +161,8 @@ public class DoctorController {
        
        int choice = docview.getRestoreChoice();
        if(choice ==1){
-           int patient_id = docview.getDoctorIdInp("Enter the ID of patient to restore: ");
-           boolean success = docDAO.restoreDoctor(choice);
+           int id = docview.getDoctorIdInp("Enter the ID of Doctor record to restore: ");
+           boolean success = docDAO.restoreDoctor(id);
            if (success){
                docview.displayMessage( "Doctor's Record restored successfully! ");
                viewAllDoctor();
@@ -183,7 +173,7 @@ public class DoctorController {
     }
     public void permanentlyDelete(){
         viewAllDoctor();
-        int doc_id = docview.getDoctorIdInp("Enter the ID of the patient to permanently delete: ");
+        int doc_id = docview.getDoctorIdInp("Enter the ID of the doctor to permanently delete: ");
         boolean success = docDAO.hardDeleteDoctor(doc_id);
         if (success){
             docview.displayMessage("Doctor record permanently deleted");
@@ -238,7 +228,7 @@ public class DoctorController {
                 switch(choice){
                      case 1:
                          docview.displayMessage("=========== View Booking Appointment =========== ");
-                         showBookingAppointment();
+                         showBookedAppointment(doctor);
                          break;
                      case 2:
                          docview.displayMessage("============ Delete Appointment =============");
@@ -270,8 +260,9 @@ public class DoctorController {
         }
     }
     
-    public void showBookingAppointment(){
-        
+    public void showBookedAppointment(Doctor doctor){
+        ArrayList<Doctor> schedule = docDAO.fetchBookedAppointment(doctor);
+        docview.displayBookedAppointment(schedule);
     }
     
     public void deleteAppointment(){

@@ -162,7 +162,7 @@ public class PatientController {
        
         int choice = ptview.getArchiveRestoreChoice();
         if(choice ==1){
-           int patient_id = ptview.getPatientIdInp("Enter the ID of patient to restore: ");
+           int patient_id = ptview.getPatientIdInp("Enter the ID of patient record to restore: ");
            boolean success = ptDAO.restorePatient(patient_id);
             if (success){
                ptview.displayMessage("Patient restored successfully! ");
@@ -241,7 +241,7 @@ public class PatientController {
                         updatePatientInfo(patient);
                         break;
                     case 3:
-                        ptview.displayMessage("===== You are booking an appointment ");
+                        ptview.displayMessage("============================= Available Schedules ===============================");
                         bookAppointment(patient);
                         break;
                     case 4:
@@ -249,7 +249,7 @@ public class PatientController {
                         System.exit(0);
                         break;
                         
-                    case 6:
+                    case 5:
                         ptview.displayMessage("Logging out..");
                         System.exit(0);           
                     default:
@@ -303,37 +303,59 @@ public class PatientController {
     public void bookAppointment(Patient patient) {
         DoctorDAOIMPL docDAO = new DoctorDAOIMPL();
         List<Doctor> availableSchedules = docDAO.getAvailableSchedules();
-    
-    if (availableSchedules.isEmpty()) {
-        System.out.println("No schedules available. Please try again later.");
-        return;
-    }
-       DoctorView docview = new DoctorView();
-       docview.displayAvailableSchedules(availableSchedules);
-//    displayAvailableSchedules(availableSchedules); //This is an error need ,odification
-
-        System.out.print("Enter Schedule ID to book: ");
-        int scheduleId = sc.nextInt();
-        sc.nextLine();  // Consume newline
-
-        Doctor selectedDoctor = availableSchedules.stream()
-            .filter(d -> d.getSchedule_id() == scheduleId)
-            .findFirst()
-            .orElse(null);
-
-        if (selectedDoctor == null) {
-            System.out.println("Invalid Schedule ID! Please try again.");
+           
+        if (availableSchedules.isEmpty()) {
+            System.out.println("No schedules available. Please try again later.");
             return;
         }
-
-        boolean success = ptDAO.addAppointment(patient.getId(), scheduleId);
-    
-        if (success) {
-        System.out.println("\nAppointment successfully booked with Dr. " + selectedDoctor.getName());
+        
+        DoctorView docview = new DoctorView();
+        docview.displayAvailableSchedules(availableSchedules);
+        
+        Patient bookappoint = ptview.bookAppointment(patient);
+        
+        boolean result = ptDAO.bookAppointment(bookappoint);
+        if (result) {
+            ptview.displayMessage("\n\nSuccessfully booked an appointment!");
         } else {
-        System.out.println("Failed to book appointment.");
+            ptview.displayMessage("\n\nFailed to add schedule.");
+        }
+      
     }
-    }
+//    public void bookAppointment(Patient patient) {
+//        DoctorDAOIMPL docDAO = new DoctorDAOIMPL();
+//        List<Doctor> availableSchedules = docDAO.getAvailableSchedules();
+//    
+//    if (availableSchedules.isEmpty()) {
+//        System.out.println("No schedules available. Please try again later.");
+//        return;
+//    }
+//       DoctorView docview = new DoctorView();
+//       docview.displayAvailableSchedules(availableSchedules);
+////    displayAvailableSchedules(availableSchedules); //This is an error need ,odification
+//
+//        System.out.print("Enter Schedule ID to book: ");
+//        int scheduleId = sc.nextInt();
+//        sc.nextLine();  // Consume newline
+//
+//        Doctor selectedDoctor = availableSchedules.stream()
+//            .filter(d -> d.getSchedule_id() == scheduleId)
+//            .findFirst()
+//            .orElse(null);
+//
+//        if (selectedDoctor == null) {
+//            System.out.println("Invalid Schedule ID! Please try again.");
+//            return;
+//        }
+//
+//        boolean success = ptDAO.addAppointment(patient, scheduleId);
+//    
+//        if (success) {
+//        System.out.println("\nAppointment successfully booked with Dr. " + selectedDoctor.getName());
+//        } else {
+//        System.out.println("Failed to book appointment.");
+//    }
+//    }
     
 //    public void viewAvailableDoctors() {
 //        Doctrol.viewAllDoctorByPatient();

@@ -9,6 +9,7 @@ package com.application.model;
  * @author Administrator
  */
 import java.time.LocalDate;
+import java.util.Date;
 public class Patient {
     private int id;
     private String username;	  //*tbluserinfos //*tblpatientinfo
@@ -24,7 +25,93 @@ public class Patient {
     private String medical_conditions;	       //*tblmedicalhistory
     private String medications;	          //*tblmedicalhistory
     private String allergies;	       //*tblmedicalhistory
-    private int appointment_id;
+   
+    private Date schedDate;
+    private Time schedTime;
+    private int sched_id;
+    private String reason;
+    private String doc_name;
+     private String doc_specialization;
+    private int app_id;
+
+    public Patient(int sched_id, String reason) {
+        this.sched_id = sched_id;
+        this.reason = reason;
+    }
+    
+    public Patient(int id, int app_id, int sched_id, Date schedDate, Time schedTime, String reason, String doc_name, String doc_specialization) {
+        this.id = id;
+        this.schedDate = schedDate;
+        this.sched_id = sched_id;
+        this.schedTime = schedTime;
+        this.reason = reason;
+        this.doc_name = doc_name;
+        this.doc_specialization = doc_specialization;
+        this.app_id = app_id;
+    }
+
+    public Patient(int id, int sched_id, String reason) {
+        this.id = id;
+        this.sched_id = sched_id;
+        this.reason = reason;
+    }
+
+    public Date getSchedDate() {
+        return schedDate;
+    }
+
+    public void setSchedDate(Date schedDate) {
+        this.schedDate = schedDate;
+    }
+
+    public Time getSchedTime() {
+        return schedTime;
+    }
+
+    public void setSchedTime(Time schedTime) {
+        this.schedTime = schedTime;
+    }
+
+    public int getSched_id() {
+        return sched_id;
+    }
+
+    public void setSched_id(int sched_id) {
+        this.sched_id = sched_id;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getDoc_name() {
+        return doc_name;
+    }
+
+    public void setDoc_name(String doc_name) {
+        this.doc_name = doc_name;
+    }
+
+    public String getDoc_specialization() {
+        return doc_specialization;
+    }
+
+    public void setDoc_specialization(String doc_specialization) {
+        this.doc_specialization = doc_specialization;
+    }
+
+    public int getApp_id() {
+        return app_id;
+    }
+
+    public void setApp_id(int app_id) {
+        this.app_id = app_id;
+    }
+    
     public Patient() {
     }
 
@@ -177,14 +264,8 @@ public class Patient {
     public void setAllergies(String allergies) {
         this.allergies = allergies;
     }
-
-    public int getAppointment_id() {
-        return appointment_id;
-    }
-
-    public void setAppointment_id(int appointment_id) {
-        this.appointment_id = appointment_id;
-    }
+    
+  
     
 
     @Override

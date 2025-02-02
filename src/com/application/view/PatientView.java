@@ -8,6 +8,7 @@ import com.application.model.Patient;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -68,6 +69,30 @@ public class PatientView {
         System.out.println("Allergies: " + patient.getAllergies());
         System.out.println("==================================================");
         
+    }
+     public Patient bookAppointment(Patient patient) {
+//        System.out.print("Enter PatientID: ");
+//        int patID = sc.nextInt();
+//        sc.nextLine();
+        System.out.print("Reason for Booking: ");
+        String reason = sc.nextLine();
+
+        System.out.print("Enter SchedID to book appointment: ");
+        int schedID = sc.nextInt();
+        sc.nextLine();
+        return new Patient(patient.getId(), schedID, reason);
+    }
+     public void displayAppointment(ArrayList<Patient> appointments) {
+        System.out.println("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-10s| %-20s| %-25s| %-20s| %-25s| %n", "AppointmentID", "Date", "Time", "Reason For Visit", "Doctor");
+        System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        appointments.forEach((schedule) -> {
+           // Match ScheduleID
+                System.out.printf("%-10s| %-20s| %-25s| %-20s| %-25s| %n",
+                        schedule.getApp_id(), schedule.getSchedDate(), schedule.getSchedTime(),
+                        schedule.getReason(), schedule.getDoc_name());
+           });
     }
    
     public void displayMessage(String message){

@@ -61,51 +61,50 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
 
 
    
-    public ArrayList<Doctor> fetchSched() {
-        String query = "SELECT tbldoctor.doc_id, name, specialization, schedule_id, schedule_date, start_time FROM tbldoctor INNER JOIN tblavailableschedule ON tbldoctor.doc_id = tblavailableschedule.doc_id WHERE toggle = 0";
-        ArrayList<Doctor> doctors = new ArrayList<>();
+//     @Override
+//    public ArrayList<Doctor> fetchSched() {
+//        String query = "SELECT tbldoctor.doc_id, name, specialization, schedule_id, schedule_date, start_time FROM tbldoctor INNER JOIN tblavailableschedule ON tbldoctor.doc_id = tblavailableschedule.doc_id WHERE toggle = 0";
+//        ArrayList<Doctor> doctors = new ArrayList<>();
+//
+//        try {
+//            connection();
+//            state = con.createStatement();
+//            rs = state.executeQuery(query);
+//
+//            while (rs.next()) {
+//                doctors.add(new Doctor(
+//                       rs.getInt("schedule_id"),
+//                       rs.getString("name"),
+//                       rs.getString("specialization"),
+//                       rs.getDate("schedule_date"),
+//                       rs.getTime("start_time"),
+//                       rs.getInt("doctor_id")
+//                ));
+//            }
+//
+//        } catch (SQLException e) {
+//            System.out.println("DoctorDaoImpl: fetchSched() " + e.getMessage());
+//
+//        } finally {
+//            try {
+//                con.close();
+//                state.close();
+//                rs.close();
+//            } catch (Exception e) {
+//                System.out.println("Failed to close resources " + e.getMessage());
+//            }
+//        }
+//        return doctors;
+//    }
 
-        try {
-            connection();
-            state = con.createStatement();
-            rs = state.executeQuery(query);
-
-            while (rs.next()) {
-                doctors.add(new Doctor(
-                       rs.getInt("schedule_id"),
-                       rs.getString("name"),
-                       rs.getString("specialization"),
-                       rs.getDate("schedule_date"),
-                       rs.getTime("start_time"),
-                       rs.getInt("doctor_id")
-                ));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("DoctorDaoImpl: fetchSched() " + e.getMessage());
-
-        } finally {
-            try {
-                con.close();
-                state.close();
-                rs.close();
-            } catch (Exception e) {
-                System.out.println("Failed to close resources " + e.getMessage());
-            }
-        }
-        return doctors;
-    }
-
+     @Override
     public List<Doctor> getAvailableSchedules() {
     List<Doctor> schedules = new ArrayList<>();
-    String query = "SELECT s.schedule_id, s.doc_id, d.doc_fullname, s.schedule_date, s.start_time " +
-                   "FROM tblavailableschedule s " +
-                   "JOIN tbldoctorinfo d ON s.doc_id = d.doc_id " +
-                   "WHERE s.toggle = 0";
+    
 
     try {
         connection();
-        stmt = con.prepareStatement(query);
+        stmt = con.prepareStatement(VIEWAVAILABLESCHED);
         rs = stmt.executeQuery();
 
         while (rs.next()) {
@@ -113,6 +112,7 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
             doctor.setSchedule_id(rs.getInt("schedule_id"));
             doctor.setId(rs.getInt("doc_id"));
             doctor.setName(rs.getString("doc_fullname"));
+            doctor.setSpecialization(rs.getString("doc_specialization")); 
             doctor.setSchedDate(rs.getDate("schedule_date"));
             doctor.setSchedTime(rs.getTime("start_time"));
 
@@ -127,13 +127,13 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
     return schedules;
      }
     
+     @Override
     public boolean addSchedule(Doctor doctor) {
         boolean addSuccess = false;
-        String query = "INSERT INTO tblavailableschedule (schedule_date, start_time, doc_id) VALUES (?, ?, ?)";
-
+       
         try {
             connection();
-            stmt = con.prepareStatement(query);
+            stmt = con.prepareStatement(ADDSCHEDULE);
             stmt.setDate(1, (java.sql.Date) doctor.getSchedDate());
             stmt.setTime(2, (java.sql.Time) doctor.getSchedTime());
             stmt.setInt(3, doctor.getId());
@@ -153,7 +153,44 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
         return addSuccess;
 
     }
+     @Override
+    public ArrayList<Doctor> fetchBookedAppointment(Doctor doctor) {
+        
+
+        ArrayList<Doctor> doctors = new ArrayList<>();
+
+        try {
+            connection(); 
+            stmt = con.prepareStatement(VIEWAPPOINTMENT);
+            stmt.setInt(1, doctor.getId()); 
+            rs = stmt.executeQuery();  
+           
+            while (rs.next()) {
+                doctors.add(new Doctor(
+                        rs.getInt("app_id"),
+                        rs.getString("pat_fullname"),
+                        rs.getDate("schedule_date"),
+                        rs.getTime("start_time"),
+                        rs.getString("reason")
+                ));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("PatientDaoImpl: fetchBookedAppointment() " + e.getMessage());
+
+        } finally {
+            try {
+                con.close();
+                state.close();
+                rs.close();
+            } catch (Exception e) {
+                System.out.println("Failed to close resources " + e.getMessage());
+            }
+        }
+        return doctors;
+    }
     
+ 
      @Override
     public boolean createAccount(Doctor doctor){ //This is for Creation of record by Admin
          try {
@@ -180,20 +217,16 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
      public boolean updateDoctor(Doctor doctor){
             try {
            connection(); 
-               stmt = con.prepareStatement(DOC_UPDATE);
-               stmt.setString(1, doctor.getUsername());
-               stmt.setString(2, doctor.getName());
-               stmt.setString(3, doctor.getSpecialization());
-               stmt.setString(4, doctor.getLicenseNumber());
-               stmt.setString(5, doctor.getContactNumber());
-               stmt.setString(6, doctor.getGender());
-               stmt.setDate(7, doctor.getDOB()!=null? java.sql.Date.valueOf(doctor.getDOB()): null);
-               stmt.setString(8, doctor.getAddress());
-               stmt.setInt(9, doctor.getId());
+               stmt = con.prepareStatement(DOC_UPDATE);      
+               stmt.setString(1, doctor.getContactNumber());
+               stmt.setString(2, doctor.getAddress());
+               stmt.setInt(3, doctor.getId());
                int rowsAffected = stmt.executeUpdate();
                return rowsAffected > 0;
            }catch(SQLException e){
                e.printStackTrace();
+           } finally {
+               try { con.close(); stmt.close(); } catch (Exception ex) { }
            }
          return false;
      }

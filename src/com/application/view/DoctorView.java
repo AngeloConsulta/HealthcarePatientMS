@@ -123,21 +123,39 @@ public class DoctorView {
         return new Doctor(doctor.getId(),doctor.getName(), scDate, scTime);
     }
     public void displayAvailableSchedules(List<Doctor> schedules) {
-        System.out.println("========= Available Schedules =========");
+        
         if (schedules.isEmpty()) {
             System.out.println("No available schedules at the moment.");
             return;
         }
-
-            System.out.printf("%-5s | %-20s | %-12s | %-10s\n", "ID", "Doctor Name", "Date", "Time");
-            System.out.println("---------------------------------------------------");
+            String format = "| %-5s | %-20s |%-20s | %-12s | %-10s |\n";
+            System.out.println("----------------------------------------------------------------------------------");
+            System.out.printf(format, "ID", "Doctor Name", "Specialization","Date", "Time");
+            System.out.println("----------------------------------------------------------------------------------");
         for (Doctor doctor : schedules) {
-            System.out.printf("%-5d | %-20s | %-12s | %-10s\n",
+            System.out.printf(format,
                 doctor.getSchedule_id(),
                 doctor.getName(),
+                doctor.getSpecialization(),
                 doctor.getSchedDate(),
                 doctor.getSchedTime());
+            System.out.println("----------------------------------------------------------------------------------");
        }
+    }
+    public void displayBookedAppointment(ArrayList<Doctor> appointments) {
+        String format = "| %-10s | %-30s| %-25s| %-20s| %-25s| %n";
+        System.out.println("\n--------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf(format, "PatientID", "Patient Name", "Date", "Time", "Reason");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------");
+
+        appointments.forEach((appointment) -> {
+            // Match ScheduleID
+            System.out.printf(format,
+                    appointment.getApp_id(), appointment.getPat_name(), appointment.getSchedDate(), appointment.getSchedTime(),
+                    appointment.getReason());
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------");
+        });
+       
     }
   
 
@@ -195,14 +213,16 @@ public class DoctorView {
         System.out.print("Enter Doctor's Name: ");
         doctor.setName(sc.next()+ sc.nextLine());
         System.out.print("Enter Specialization: ");
-        doctor.setSpecialization(sc.next());
+        doctor.setSpecialization(sc.nextLine());
         System.out.print("Enter Licensed Number: ");
         doctor.setLicenseNumber(sc.next());
         System.out.print("Enter Contact Number: ");
         doctor.setContactNumber(sc.next());
         System.out.print("Gender: ");
         doctor.setGender(sc.next());
-        LocalDate DOB = null;
+        
+        sc.nextLine();
+        
         LocalDate dateOfBirth = null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -217,9 +237,10 @@ public class DoctorView {
             }
         }
 
-        System.out.println("Date of Birth: " + dateOfBirth);
+        
+        doctor.setDOB(dateOfBirth);
         System.out.print("Enter Address: ");
-        doctor.setAddress(sc.next()+ sc.nextLine());
+        doctor.setAddress(sc.nextLine());
 
         return doctor;
     }
@@ -228,10 +249,10 @@ public class DoctorView {
     String format = "| %-5s | %-15s | %-20s | %-20s | %-20s | %-15s | %-10s | %-15s | %-25s |\n";
     
     System.out.println("------------------------------------------------------------------------------------------------------------"
-                       + "---------------------------------------------------------------------------------");
+                       + "---------------------------------------------------------------");
     System.out.printf(format, "ID", "Username", "Name", "Specialization", "License No.","Contact No." ,"Gender", "Date of Birth", "Address");
     System.out.println("------------------------------------------------------------------------------------------------------------"
-                       + "---------------------------------------------------------------------------------");
+                       + "---------------------------------------------------------------");
     
     for (Doctor doctor : doctors) {
         System.out.printf(format,
@@ -244,47 +265,36 @@ public class DoctorView {
             doctor.getGender(),
             (doctor.getDOB() != null ? doctor.getDOB().toString() : "N/A"),
             doctor.getAddress()
-           
+        
         );
+        System.out.println("------------------------------------------------------------------------------------------------------------"
+                       + "---------------------------------------------------------------");
     }
-    System.out.println("------------------------------------------------------------------------------------------------------------"
-                       + "---------------------------------------------------------------------------------");
+   
     }
-//    public void viewAllDoctorForPatient(List<Doctor> doctors){
-//         String format = "| %-4s | %-20s | %-15s | %-20s |\n";
-//        
-//        System.out.println("-------------------------------------------------------------------------");
-//        System.out.printf(format, "ID", "Name", "Specialization", "Address");
-//        System.out.println("-------------------------------------------------------------------------");
-//
-//       // Loop through the doctors list and display only the required fields
-//        for (Doctor doctor : doctors) {
-//        System.out.printf(format, 
-//                      doctor.getId(), doctor.getName(), 
-//                      doctor.getSpecialization(), doctor.getAddress();    
-//               }
-//        System.out.println("--------------------------------------------------------------------------");
-//    }
+
     
     
     // This the UPDATE CRUD API
     // Display a prompt and get integer input for doctor ID
     public int getDoctorIdInput(String prompt) {
         System.out.print(prompt);
-        return sc.nextInt();
+        int id = sc.nextInt();
+        sc.nextLine(); // ⚡ Consume the leftover newline to prevent skipping
+        return id;
     }
 
     // Get updated value or keep the current value if input is blank
     public String getInputOrDefault(String fieldName, String currentValue) {
         System.out.print(fieldName + " [" + currentValue + "]: ");
-        String input = sc.nextLine();
+        String input = sc.nextLine().trim();
        return input.isEmpty() ? currentValue : input;
     }
 
     // Get updated date or keep the current date if input is blank
     public LocalDate getDateInputOrDefault(String fieldName, LocalDate currentValue) {
         System.out.print(fieldName + " [" + (currentValue != null ? currentValue.toString() : "N/A") + "]: ");
-        String input = sc.nextLine();
+        String input = sc.nextLine().trim();
         return input.isEmpty() ? currentValue : LocalDate.parse(input);
     }
 
