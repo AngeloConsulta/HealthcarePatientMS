@@ -103,7 +103,7 @@ public class AdminController {
         }
     }
     public void searchPerson(){
-        sc.nextLine();
+//        sc.nextLine();
         System.out.print("Enter the Name or Username to Search: ");
         String keyword = sc.nextLine().trim();
         if(keyword.isEmpty()){

@@ -24,7 +24,7 @@ public class Patient {
     private String medical_conditions;	       //*tblmedicalhistory
     private String medications;	          //*tblmedicalhistory
     private String allergies;	       //*tblmedicalhistory
-
+    private int appointment_id;
     public Patient() {
     }
 
@@ -177,6 +177,15 @@ public class Patient {
     public void setAllergies(String allergies) {
         this.allergies = allergies;
     }
+
+    public int getAppointment_id() {
+        return appointment_id;
+    }
+
+    public void setAppointment_id(int appointment_id) {
+        this.appointment_id = appointment_id;
+    }
+    
 
     @Override
     public String toString() {

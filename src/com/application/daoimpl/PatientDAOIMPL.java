@@ -71,7 +71,58 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
         return patient;
     }
 
-    
+    public boolean addAppointment(int patientId, int scheduleId) {
+        
+        boolean success = false;
+        String query = "INSERT INTO tblappointment (pat_id, schedule_id) VALUES (?, ?)";
+
+        try {
+            connection();
+            stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            stmt.setInt(1, patientId);
+            stmt.setInt(2, scheduleId);
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+                    int appointmentId = rs.getInt(1);
+                    success = updatePatientAppointment(patientId, appointmentId);
+                }
+            }
+        }catch (SQLException e) {
+            System.out.println("Error booking appointment: " + e.getMessage());
+        }finally {
+            try { con.close(); } catch (SQLException ex) { System.out.println("Error closing connection: " + ex.getMessage()); }
+        }
+
+    return success;
+    }
+    public boolean updatePatientAppointment(int patientId, int appointmentId) {
+               
+        boolean success = false;
+        String query = "UPDATE tblpatientinfo SET appointment_id = ? WHERE pat_id = ?";
+        
+
+        try {
+                       
+            connection();
+            stmt = con.prepareStatement(query);
+            stmt.setInt(1, appointmentId);
+            stmt.setInt(2, patientId);
+        
+            success = stmt.executeUpdate() > 0;
+            
+        }catch (SQLException e) {
+            System.out.println("Error updating patient appointment: " + e.getMessage());
+        }finally {
+            try { con.close(); } catch (SQLException ex) { System.out.println("Error closing connection: " + ex.getMessage()); }
+        }
+
+        return success;
+    }
+
+
     @Override
     public boolean updatePatientPersonalDetails(Patient patient) {
     

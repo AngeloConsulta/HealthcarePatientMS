@@ -100,7 +100,7 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
     List<Doctor> schedules = new ArrayList<>();
     String query = "SELECT s.schedule_id, s.doc_id, d.doc_fullname, s.schedule_date, s.start_time " +
                    "FROM tblavailableschedule s " +
-                   "JOIN tbldoctor d ON s.doc_id = d.doc_id " +
+                   "JOIN tbldoctorinfo d ON s.doc_id = d.doc_id " +
                    "WHERE s.toggle = 0";
 
     try {
@@ -294,7 +294,7 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
         Date dobsql = rs.getDate("doc_dob");
         doctor.setDOB(dobsql !=null ? dobsql.toLocalDate(): null); // Convert java.sql.Date to LocalDate
         doctor.setAddress(rs.getString("doc_address"));
-        Date availsql = rs.getDate("doc_availability_status");
+        
         
         return doctor;
     }

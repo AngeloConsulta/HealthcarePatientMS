@@ -43,10 +43,9 @@ public class PatientView {
         System.out.println("\nWelcome to the Patient Dashboard");
         System.out.println("[1] View Personal Details");
         System.out.println("[2] Update Personal Info");
-        System.out.println("[3] View Available Doctors");
-        System.out.println("[4] Book an Appointment");
-        System.out.println("[5] Cancel an Appointment");
-        System.out.println("[6] Logout");
+        System.out.println("[3] Book an Appointment");
+        System.out.println("[4] Cancel an Appointment");
+        System.out.println("[5] Logout");
         
         System.out.print("\nEnter your choice: ");
         int choice=sc.nextInt();

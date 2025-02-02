@@ -5,12 +5,17 @@
 package com.application.controller;
 
 import com.application.Application;
+import com.application.dao.DoctorDAO;
+import com.application.daoimpl.DoctorDAOIMPL;
 
 import com.application.daoimpl.PatientDAOIMPL;
+import com.application.model.Doctor;
 
 import com.application.model.Patient;
+import com.application.view.DoctorView;
 import com.application.view.PatientView;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  *
@@ -25,7 +30,7 @@ public class PatientController {
     private final Application app = new Application();
     private final DoctorController Doctrol = new DoctorController();
     private final AdminController admControl = new AdminController();
-   
+    private final Scanner sc = new Scanner(System.in);
     
     
     
@@ -236,15 +241,11 @@ public class PatientController {
                         updatePatientInfo(patient);
                         break;
                     case 3:
-                        ptview.displayMessage("======= Viewing Available Doctor =======");
-//                      viewAvailableDoctors();
+                        ptview.displayMessage("===== You are booking an appointment ");
+                        bookAppointment(patient);
                         break;
                     case 4:
-                        ptview.displayMessage("===== You are booking an appointment ");
-//                      bookAppointment();
-                        break;
-                    
-                    case 5:
+                        ptview.displayMessage("===== Cancelling an appointment is coming soon ");
                         System.exit(0);
                         break;
                         
@@ -300,14 +301,16 @@ public class PatientController {
     }
     }
     public void bookAppointment(Patient patient) {
-    List<Doctor> availableSchedules = doctorDAO.getAvailableSchedules();
+        DoctorDAOIMPL docDAO = new DoctorDAOIMPL();
+        List<Doctor> availableSchedules = docDAO.getAvailableSchedules();
     
     if (availableSchedules.isEmpty()) {
         System.out.println("No schedules available. Please try again later.");
         return;
     }
-
-    displayAvailableSchedules(availableSchedules); //This is an error need ,odification
+       DoctorView docview = new DoctorView();
+       docview.displayAvailableSchedules(availableSchedules);
+//    displayAvailableSchedules(availableSchedules); //This is an error need ,odification
 
         System.out.print("Enter Schedule ID to book: ");
         int scheduleId = sc.nextInt();
@@ -323,7 +326,7 @@ public class PatientController {
             return;
         }
 
-        boolean success = appointmentDAO.addAppointment(patient.getId(), scheduleId);
+        boolean success = ptDAO.addAppointment(patient.getId(), scheduleId);
     
         if (success) {
         System.out.println("\nAppointment successfully booked with Dr. " + selectedDoctor.getName());
