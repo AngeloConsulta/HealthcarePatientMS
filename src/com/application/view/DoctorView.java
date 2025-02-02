@@ -48,52 +48,15 @@ public class DoctorView {
         System.out.println("\nWelcome to the Doctors Dashboard");
         System.out.println("\n");
         System.out.println("[1] View Booking Appointment");
-        System.out.println("[2] Delete Appointment ");
-        System.out.println("[3] View Personal Details");
-        System.out.println("[4] Update for Availability Schedule");
-        System.out.println("[5] Logout");
+        System.out.println("[2] View Personal Details");
+        System.out.println("[3] Update for Availability Schedule");
+        System.out.println("[4] Logout");
         System.out.print("\nEnter your choice: ");
         int choice = sc.nextInt();
         sc.nextLine();
         return choice;
     }
-//    public void displayDoctor(ArrayList<Doctor> doctors) {
-//        System.out.println("\n----------------------------------------------------------------------------------------------------------------------------------------------");
-//        System.out.printf("%-4s| %-20s| %-25s| %-20s| %-25s| %-25s| %n", "ID", "USERNAME", "NAME", "SPECIALIZATION", "LICENSE NO.", "CONTACT");
-//        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------");
-//
-//        doctors.forEach((doctor) -> {
-//            System.out.printf("%-4s| %-20s| %-25s| %-20s| %-25s| %-25s| %n", doctor.getId(), doctor.getUsername(), doctor.getName(),
-//                    doctor.getSpecialization(), doctor.getLicenseNumber(), doctor.getContactNumber());
-//        }); 
-//
-//    }
-//
-//    public void displaysDoctorByAdmin(ArrayList<Doctor> doctors) {
-//        System.out.println("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-//        System.out.printf("%-10s| %-20s| %-25s| %-20s| %-25s| %-25s| %-25s| %-25s| %-25s| %-25s| %n", "ID", "USERNAME", "PASSWORD", "NAME", "SPECIALIZATION", "LICENSE NO.", "CONTACT", "GENDER", "BIRTHDATE", "ADDRESS");
-//        System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-//
-//        doctors.forEach((doctor) -> {
-//            System.out.printf("%-4s| %-20s| %-25s| %-20s| %-25s| %-25s| %-25s| %-25s| %-25s| %-25s| %n", doctor.getDoctor_id(), doctor.getUsername(), doctor.getPassword(), doctor.getName(),
-//                    doctor.getSpecialization(), doctor.getLicenseNumber(), doctor.getContactNumber(), doctor.getGender(), doctor.getDob(), doctor.getAddress());
-//        }); 
-//
-//    }
-//
-//    public void displaySchedule(ArrayList<Doctor> schedules) {
-//        System.out.println("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-//        System.out.printf("%-10s| %-20s| %-25s| %-20s| %-25s| %-10s|  %n", "SchedID", "Name", "Specialization", "Available Date", "Start Time", "DoctorID");
-//        System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-//
-//        schedules.forEach((schedule) -> {
-//            System.out.printf("%-10s| %-20s| %-25s| %-20s| %-25s| %-10s| %n", schedule.getSchedule_id(), schedule.getName(), schedule.getSpecialization(),
-//                    schedule.getSchedDate(), schedule.getSchedTime(), schedule.getId());
-//
-//        });
-//
-//    }
-//
+
     public Doctor addSchedule(Doctor doctor) {
       
        
@@ -279,11 +242,17 @@ public class DoctorView {
     // Display a prompt and get integer input for doctor ID
     public int getDoctorIdInput(String prompt) {
         System.out.print(prompt);
+        while (!sc.hasNextInt()) {
+            System.out.println("Invalid input. Please enter a valid ID.");
+            sc.next(); // Clear invalid input
+            System.out.print(prompt);
+        }
         int id = sc.nextInt();
-        sc.nextLine(); // ⚡ Consume the leftover newline to prevent skipping
+        sc.nextLine(); // Consume the newline to prevent input skipping
         return id;
+        
     }
-
+    
     // Get updated value or keep the current value if input is blank
     public String getInputOrDefault(String fieldName, String currentValue) {
         System.out.print(fieldName + " [" + currentValue + "]: ");

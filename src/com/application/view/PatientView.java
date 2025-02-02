@@ -45,8 +45,7 @@ public class PatientView {
         System.out.println("[1] View Personal Details");
         System.out.println("[2] Update Personal Info");
         System.out.println("[3] Book an Appointment");
-        System.out.println("[4] Cancel an Appointment");
-        System.out.println("[5] Logout");
+        System.out.println("[4] Logout");
         
         System.out.print("\nEnter your choice: ");
         int choice=sc.nextInt();
@@ -153,7 +152,9 @@ public class PatientView {
             sc.next(); // Clear invalid input
             System.out.print(prompt);
         }
-        return sc.nextInt();
+        int id = sc.nextInt();
+        sc.nextLine(); // Consume the newline to prevent input skipping
+        return id;
     }
 
     // Get string input with a default value

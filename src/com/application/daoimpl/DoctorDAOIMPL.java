@@ -27,13 +27,13 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
 
      //This method is only accessible in Doctor's: This is needed to M
      @Override
-     public Doctor getDoctorLogin(String username , String password) {
-       
-        Doctor doctor = null;
-        try {
-        connection();     
+     public Doctor getDoctorLogin(String username , String password){
+         
+         Doctor doctor = null;
+         try {
+         connection();   
+         
             stmt = con.prepareStatement(DOC_LOGIN);
-            
             stmt.setString(1, username);
             stmt.setString(2, password);
             rs = stmt.executeQuery();
@@ -53,79 +53,38 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
                 }
 
         } catch (SQLException e) {
-            Logger.getLogger(DoctorDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
-        }
+            System.out.println("Error Logging in " + e.getMessage());
+       
+       }
         return doctor;
     }  
-     
-
-
-   
-//     @Override
-//    public ArrayList<Doctor> fetchSched() {
-//        String query = "SELECT tbldoctor.doc_id, name, specialization, schedule_id, schedule_date, start_time FROM tbldoctor INNER JOIN tblavailableschedule ON tbldoctor.doc_id = tblavailableschedule.doc_id WHERE toggle = 0";
-//        ArrayList<Doctor> doctors = new ArrayList<>();
-//
-//        try {
-//            connection();
-//            state = con.createStatement();
-//            rs = state.executeQuery(query);
-//
-//            while (rs.next()) {
-//                doctors.add(new Doctor(
-//                       rs.getInt("schedule_id"),
-//                       rs.getString("name"),
-//                       rs.getString("specialization"),
-//                       rs.getDate("schedule_date"),
-//                       rs.getTime("start_time"),
-//                       rs.getInt("doctor_id")
-//                ));
-//            }
-//
-//        } catch (SQLException e) {
-//            System.out.println("DoctorDaoImpl: fetchSched() " + e.getMessage());
-//
-//        } finally {
-//            try {
-//                con.close();
-//                state.close();
-//                rs.close();
-//            } catch (Exception e) {
-//                System.out.println("Failed to close resources " + e.getMessage());
-//            }
-//        }
-//        return doctors;
-//    }
-
+ 
      @Override
     public List<Doctor> getAvailableSchedules() {
-    List<Doctor> schedules = new ArrayList<>();
-    
-
-    try {
-        connection();
-        stmt = con.prepareStatement(VIEWAVAILABLESCHED);
-        rs = stmt.executeQuery();
-
-        while (rs.next()) {
-            Doctor doctor = new Doctor();
-            doctor.setSchedule_id(rs.getInt("schedule_id"));
-            doctor.setId(rs.getInt("doc_id"));
-            doctor.setName(rs.getString("doc_fullname"));
-            doctor.setSpecialization(rs.getString("doc_specialization")); 
-            doctor.setSchedDate(rs.getDate("schedule_date"));
-            doctor.setSchedTime(rs.getTime("start_time"));
+        List<Doctor> schedules = new ArrayList<>();
+        try {
+            connection();
+            stmt = con.prepareStatement(VIEWAVAILABLESCHED);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Doctor doctor = new Doctor();
+                doctor.setSchedule_id(rs.getInt("schedule_id"));
+                doctor.setId(rs.getInt("doc_id"));
+                doctor.setName(rs.getString("doc_fullname"));
+                doctor.setSpecialization(rs.getString("doc_specialization")); 
+                doctor.setSchedDate(rs.getDate("schedule_date"));
+                doctor.setSchedTime(rs.getTime("start_time"));
+                
 
             schedules.add(doctor);
         }
-    } catch (SQLException e) {
-        System.out.println("Error fetching available schedules: " + e.getMessage());
-    } finally {
-        try { con.close(); } catch (SQLException ex) { /* Handle close error */ }
+        } catch (SQLException e) {
+            System.out.println("Error fetching available schedules: " + e.getMessage());
+        } finally { 
+            try { con.close();} catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
+        }
+        return schedules;
     }
-
-    return schedules;
-     }
     
      @Override
     public boolean addSchedule(Doctor doctor) {
@@ -143,11 +102,7 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
         } catch (SQLException e) {
             System.out.println("Error Adding Schedule" + doctor.getName() + " - " + e.getMessage());
         } finally {
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                System.out.println("Failed to close resources: " + ex.getMessage());
-            }
+            try {con.close(); state.close();rs.close(); } catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage());}
         }
 
         return addSuccess;
@@ -176,15 +131,10 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
             }
 
         } catch (SQLException e) {
-            System.out.println("PatientDaoImpl: fetchBookedAppointment() " + e.getMessage());
+            System.out.println("Error Fetching Patient Appointment Data " + e.getMessage());
 
         } finally {
-            try {
-                con.close();
-                state.close();
-                rs.close();
-            } catch (Exception e) {
-                System.out.println("Failed to close resources " + e.getMessage());
+            try {con.close(); } catch (SQLException e) {System.out.println("Failed to close resources " + e.getMessage());
             }
         }
         return doctors;
@@ -193,8 +143,8 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
  
      @Override
     public boolean createAccount(Doctor doctor){ //This is for Creation of record by Admin
-         try {
-         connection();        
+        try {
+        connection();        
             stmt = con.prepareStatement(DOC_CREATEACCOUNT);
             stmt.setString(1, doctor.getUsername());
             stmt.setString(2, doctor.getPassword());
@@ -207,28 +157,30 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
             stmt.setDate(8, Date.valueOf(DOB));
             stmt.setString(9, doctor.getAddress());
             return stmt.executeUpdate()>0;
-        } catch (SQLException e) {
-            Logger.getLogger(DoctorDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
-            return false;
+        }catch(SQLException e){
+                System.out.println("Invalid input, Please Try Again "+ e);
+        } finally {
+               try { con.close(); stmt.close(); } catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
         }
+         return false;
      }
 
      @Override
-     public boolean updateDoctor(Doctor doctor){
-            try {
-           connection(); 
-               stmt = con.prepareStatement(DOC_UPDATE);      
-               stmt.setString(1, doctor.getContactNumber());
-               stmt.setString(2, doctor.getAddress());
-               stmt.setInt(3, doctor.getId());
-               int rowsAffected = stmt.executeUpdate();
-               return rowsAffected > 0;
-           }catch(SQLException e){
-               e.printStackTrace();
-           } finally {
-               try { con.close(); stmt.close(); } catch (Exception ex) { }
-           }
-         return false;
+    public boolean updateDoctor(Doctor doctor){
+        try {
+        connection(); 
+            stmt = con.prepareStatement(DOC_UPDATE);      
+            stmt.setString(1, doctor.getContactNumber());
+            stmt.setString(2, doctor.getAddress());
+            stmt.setInt(3, doctor.getId());
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        }catch(SQLException e){
+             System.out.println("Invalid input, Please Try Again "+ e);
+        } finally {
+            try { con.close(); stmt.close(); } catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
+        }
+        return false;
      }
      //Soft Delete (Archive)
      @Override
@@ -252,7 +204,7 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
         
         try {
         connection(); 
-            state = con.prepareStatement(DOC_RESTORE);
+            stmt = con.prepareStatement(DOC_RESTORE);
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -293,6 +245,8 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
             
         }catch (SQLException e){
             e.printStackTrace();
+        } finally {
+            try { con.close(); stmt.close(); } catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
         }
         return doctors;
     }

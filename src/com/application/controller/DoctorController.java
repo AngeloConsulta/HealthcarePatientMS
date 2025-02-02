@@ -231,18 +231,14 @@ public class DoctorController {
                          showBookedAppointment(doctor);
                          break;
                      case 2:
-                         docview.displayMessage("============ Delete Appointment =============");
-                         deleteAppointment();
-                         break;
-                     case 3:
                          docview.displayMessage("======= View Personal Details ========");
                          viewPersonalDetails(doctor);
                          break;
-                     case 4:
+                     case 3:
                           docview.displayMessage("========= Add Schedule ========");
                           addSchedule(doctor);
                           break;
-                     case 5:
+                     case 4:
                           docview.displayMessage("===== Logging out ===== ");
                           System.exit(0);
                           break;

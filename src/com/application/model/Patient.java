@@ -8,6 +8,7 @@ package com.application.model;
  *
  * @author Administrator
  */
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.Date;
 public class Patient {

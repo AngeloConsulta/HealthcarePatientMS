@@ -91,14 +91,14 @@ public class AdminController {
                     break;
                 case 4:
                     System.exit(0);
-                    break;
+                    return;
                 default:
                     adminView.displayMessage("Invalid Choice. Try Again");
-                    handleDashboard();
+                    break;
             }
             }catch(Exception e){
                 adminView.displayMessage("Invalid Input. Please Input Number only");
-                handleDashboard();
+                
             }
         }
     }
@@ -122,47 +122,5 @@ public class AdminController {
         docController.manageDoctors();
     }
             
-//     public void dashboardchoice(){
-//        switch(){
-//            case 1 ->registerAdmin();
-//            case 2 ->loginAdmin();
-//            case 3 -> app.mainMenu();
-//            default ->adminView.displayMessage("Invalid choice, Please try again");
-//        }  
-//    }
 
- 
-   
-//    public void displayDashboard(){
-//        while(true){
-//            view.displayDashboard();
-//            int choice = Integer.parseInt(view.getInput());
-//        
-//        switch(choice){
-//            case 1:
-//                view.displayMessage("View an appointment..");
-////                bookAppointment();
-//                break;
-//            case 2:
-//                view.displayMessage("Create Patient Information..");
-////                viewAppointment();
-//                break;
-//            case 3:
-//                view.displayMessage("Update Patient Information..");
-////                cancelAppointment();
-//                break;
-//            case 4:
-//                view.displayMessage("Delete Patient Information..");
-//                break;
-//            case 5:
-//                view.displayMessage("Logging out..");
-//                break;
-//            default:
-//                view.displayMessage("Invalid option. Try Again");
-//                displayDashboard();
-//            
-//        }
-//     
-//        }
-//    }
 }

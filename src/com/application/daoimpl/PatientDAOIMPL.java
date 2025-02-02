@@ -70,42 +70,6 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
         }
         return patient;
     }
-//    public ArrayList<Doctor> fetchSched() {
-//        String query = "SELECT schedule_id ,doc_fullname, doc_specialization, schedule_date, start_time, tbldoctorinfo.doc_id FROM tbldoctorinfo INNER JOIN tblavailableschedule ON tbldoctorinfo.doc_id = tblavailableschedule.doc_id WHERE toggle = 0";
-//        ArrayList<Doctor> doctors = new ArrayList<>();
-//
-//        try {
-//            connection();
-//            state = con.createStatement();
-//            rs = state.executeQuery(query);
-//
-//            while (rs.next()) {
-//                doctors.add(new Doctor(
-//                        rs.getInt("schedule_id"),
-//                        rs.getString("doc_fullname"),
-//                        rs.getString("doc_specialization"),
-//                        rs.getDate("schedule_date"),
-//                        rs.getTime("start_time"),
-//                        rs.getInt("doc_id")
-//                ));
-//            }
-//
-//        } catch (SQLException e) {
-//            System.out.println("DoctorDaoImpl: fetchSched() " + e.getMessage());
-//
-//        } finally {
-//            try {
-//                con.close();
-//                state.close();
-//                rs.close();
-//            } catch (Exception e) {
-//                System.out.println("Failed to close resources " + e.getMessage());
-//            }
-//        }
-//        return doctors;
-//    }
-
-//    
 
 
     @Override
@@ -141,59 +105,6 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
     }
     
 
-//    public boolean addAppointment(Patient patient, int scheduleId) {
-//        
-//        boolean success = false;
-//        String query = "INSERT INTO tblappointment (pat_id, schedule_id) VALUES (?, ?)";
-//
-//        try {
-//            connection();
-//            stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-//            stmt.setInt(1, patient.getId());
-//            stmt.setInt(2, scheduleId);
-//
-//            int rowsAffected = stmt.executeUpdate();
-//            if (rowsAffected > 0) {
-//                rs = stmt.getGeneratedKeys();
-//                if (rs.next()) {
-//                    int appointmentId = rs.getInt(1);
-//                    success = updatePatientAppointment(patient);
-//                }
-//            }
-//        }catch (SQLException e) {
-//            System.out.println("Error booking appointment: " + e.getMessage());
-//        }finally {
-//            try { con.close(); } catch (SQLException ex) { System.out.println("Error closing connection: " + ex.getMessage()); }
-//        }
-//
-//    return success;
-//    }
-//    public boolean updatePatientAppointment(Patient patient) {
-//               
-//        boolean success = false;
-//        String query = "UPDATE tblpatientinfo SET appointment_id = ? WHERE pat_id = ?";
-//        
-//
-//        try {
-//                       
-//            connection();
-//            stmt = con.prepareStatement(query);
-//            
-//            stmt.setInt(1, patient.getApp_id());
-//            stmt.setInt(2, patient.getId());
-//        
-//            success = stmt.executeUpdate() > 0;
-//            
-//        }catch (SQLException e) {
-//            System.out.println("Error updating patient appointment: " + e.getMessage());
-//        }finally {
-//            try { con.close(); } catch (SQLException ex) { System.out.println("Error closing connection: " + ex.getMessage()); }
-//        }
-//
-//        return success;
-//    }
-//
-
     @Override
     public boolean updatePatientPersonalDetails(Patient patient) {
     
@@ -216,7 +127,7 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
             System.out.println("Rows updated: " + rowsAffected);
             return rowsAffected > 0;
         }catch (SQLException e) {
-            e.printStackTrace();
+             Logger.getLogger(PatientDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
         return false;
         }
     }

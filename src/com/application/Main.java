@@ -11,9 +11,7 @@ import java.util.Scanner;
  *
  * @author Administrator
  */
-//import com.application.controller.PatientController;
-//import com.application.model.Patient;
-//import com.application.view.PatientView;
+
 
 
 

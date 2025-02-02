@@ -25,6 +25,7 @@ public class Application {
         System.out.println("[1] Admin");
         System.out.println("[2] Doctor");
         System.out.println("[3] Patient");
+        System.out.println("[4] Exit");
 
         System.out.print("\nEnter your choice: ");
         
@@ -43,7 +44,7 @@ public class Application {
             case 4 :
                 System.out.println("Exiting...");
                 System.exit(0);
-            
+                
             default : 
                 System.out.println("Invalid choice. Please try again.");
                 mainMenu();
