@@ -16,8 +16,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -55,7 +54,9 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
         } catch (SQLException e) {
             System.out.println("Error Logging in " + e.getMessage());
        
-       }
+        } finally { 
+            try { con.close();} catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
+        }
         return doctor;
     }  
  
@@ -102,7 +103,7 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
         } catch (SQLException e) {
             System.out.println("Error Adding Schedule" + doctor.getName() + " - " + e.getMessage());
         } finally {
-            try {con.close(); state.close();rs.close(); } catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage());}
+            try {con.close(); } catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage());}
         }
 
         return addSuccess;
@@ -160,7 +161,7 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
         }catch(SQLException e){
                 System.out.println("Invalid input, Please Try Again "+ e);
         } finally {
-               try { con.close(); stmt.close(); } catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
+               try { con.close();} catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
         }
          return false;
      }
@@ -178,7 +179,7 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
         }catch(SQLException e){
              System.out.println("Invalid input, Please Try Again "+ e);
         } finally {
-            try { con.close(); stmt.close(); } catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
+            try { con.close();} catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
         }
         return false;
      }
@@ -193,7 +194,7 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         }catch (SQLException e){
-            Logger.getLogger(DoctorDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
+            System.out.println("Invalid input, Please Try Again "+ e);
             return false;
         }
             
@@ -209,7 +210,7 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            Logger.getLogger(DoctorDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
+            System.out.println("Invalid input, Please Try Again "+ e);
             return false;
         }
     }
@@ -224,7 +225,7 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            Logger.getLogger(DoctorDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
+            System.out.println("Invalid input, Please Try Again "+ e);
             return false;
         }
     }
@@ -244,9 +245,9 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
             }
             
         }catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Invalid input, Please Try Again "+ e);
         } finally {
-            try { con.close(); stmt.close(); } catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
+            try { con.close();} catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
         }
         return doctors;
     }
@@ -263,7 +264,9 @@ public class DoctorDAOIMPL extends DBConnection implements DoctorDAO,  QueryCons
                 doctors.add(doctor);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Invalid input, Please Try Again "+ e);
+        } finally {
+            try { con.close();} catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
         }
         return doctors;
     }

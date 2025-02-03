@@ -54,4 +54,16 @@ public interface QueryConstant {
     String ADMIN_CREATEACCOUNT = "INSERT INTO tbladmininfo (admin_username, admin_password, admin_fullname, admin_age, admin_gender)VALUES(?,?,?,?,?) ";
     String SEARCHDOCTOR = "SELECT 'Doctor' AS type, doc_id, doc_username, doc_fullname, doc_specialization FROM tbldoctorinfo WHERE doc_fullname LIKE ? OR doc_username LIKE ?";
     String SEARCHPATIENT = "SELECT 'Patient' AS type, pat_id, pat_username, pat_fullname, pat_medicalconditions FROM tblpatientinfo WHERE pat_fullname LIKE ? OR pat_username LIKE ?";
+    
+    
+//    String RESET = "\033[0m";  // Reset color
+//    String RED = "\033[0;31m"; // Red
+//    String GREEN = "\033[0;32m"; // Green
+//    String YELLOW = "\033[0;33m"; // Yellow
+//    String BLUE = "\033[0;34m"; // Blue
+//    String MAGENTA = "\033[0;35m"; // Magenta
+//    String CYAN = "\033[0;36m"; // Cyan
+//    String WHITE = "\033[0;37m"; // White
+
 }
+

@@ -66,7 +66,9 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
             }
 
         } catch (SQLException e) {
-            Logger.getLogger(PatientDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
+            System.out.println("Invalid input, Please Try Again "+ e);
+        } finally { 
+            try { con.close();} catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
         }
         return patient;
     }
@@ -127,9 +129,12 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
             System.out.println("Rows updated: " + rowsAffected);
             return rowsAffected > 0;
         }catch (SQLException e) {
-             Logger.getLogger(PatientDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
-        return false;
+             System.out.println("Invalid input, Please Try Again "+ e);
+        
+        }finally { 
+            try { con.close();} catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
         }
+        return false;
     }
     
     
@@ -153,11 +158,13 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            Logger.getLogger(PatientDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
-            return false;
+            System.out.println("Invalid input, Please Try Again "+ e);
+            
         
+        }finally {
+               try { con.close();} catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
         }
-   
+    return false;
     }
     
     @Override
@@ -179,9 +186,11 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
              int rowsAffected = stmt.executeUpdate();
              return rowsAffected > 0;
          }catch(SQLException e){
-              Logger.getLogger(PatientDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
+              System.out.println("Invalid input, Please Try Again "+ e);
         
-         }
+         }finally {
+               try { con.close();} catch (SQLException ex) {System.out.println("Failed to close resources: " + ex.getMessage()); }
+        }
         return false;
         
     }
@@ -197,8 +206,8 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         }catch (SQLException e){
-            Logger.getLogger(PatientDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
-             return false;
+            System.out.println("Invalid input, Please Try Again "+ e);
+            return false;
        
         }
        
@@ -214,7 +223,7 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            Logger.getLogger(PatientDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
+            System.out.println("Invalid input, Please Try Again "+ e);
             return false;
         }
        
@@ -231,7 +240,7 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            Logger.getLogger(PatientDAOIMPL.class.getName()).log(Level.SEVERE, null, e);
+            System.out.println("Invalid input, Please Try Again "+ e);
             return false;
         }
          
@@ -252,7 +261,7 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
             }
             
         }catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Invalid input, Please Try Again "+ e);
         
         }
         return patients;
@@ -271,7 +280,7 @@ public class PatientDAOIMPL extends DBConnection implements PatientDAO, QueryCon
             
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Invalid input, Please Try Again "+ e);
        
         }
         return patients;
