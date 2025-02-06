@@ -21,7 +21,7 @@ public class Application  {
         PatientController ptController = new PatientController();
         DoctorController docController = new DoctorController();
         Scanner sc = new Scanner(System.in);
-        System.out.println("\nWelcome to the Healthcare Patient Management System");
+        System.out.println("\n\n\n\n\n\n\n\n\n\nWelcome to the Healthcare Patient Management System");
         System.out.println("\nPlease select your role:");
         System.out.println("[1] Admin");
         System.out.println("[2] Doctor");

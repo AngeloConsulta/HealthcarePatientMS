@@ -17,7 +17,7 @@ public class AdminView {
     
     
     public int handleAdminLogin(){
-        System.out.println("\nAdmin Dashboard System");
+        System.out.println("\n\n\n\n\n\n\n\n\n\nAdmin Dashboard System");
         System.out.println("\n[1]  Login");
         System.out.println("[2]  Back to Main Menu");
         System.out.print("\nEnter your choice: ");

@@ -31,7 +31,7 @@ public class PatientView {
     }
     //This is for patient side only
     public int handleLoginPatient(){
-        System.out.println("\n Patient Dashboard System");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n Patient Dashboard System");
         System.out.println("[1]  Login");
         System.out.println("[2]  Back to Main Menu");
         System.out.print("\nEnter your choice: ");

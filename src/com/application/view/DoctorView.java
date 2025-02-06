@@ -23,7 +23,7 @@ public class DoctorView {
     //This section is for Doctor's to access
     public Doctor displayLoginPrompt(){ //Di pa tapos Login the Doctor user
         Doctor doctor = new Doctor();
-        System.out.println("\nLogin to Doctor Dashboard");
+        System.out.println("\n\n\n\n\n\n\n\n\n\nLogin to Doctor Dashboard");
         System.out.print("Enter Username: ");
         doctor.setUsername(sc.nextLine());
         System.out.print("Enter Password: ");
