@@ -32,6 +32,12 @@ The **Healthcare Patient Management System** is a comprehensive console-based Ja
    git clone https://github.com/yourusername/healthcare-patient-management.git
    cd healthcare-patient-management
 
+
+## Screenshots 
+![Dashboard Screenshot](https://raw.githubusercontent.com/<username>/<repository>/main/images/dashboard.png?raw=true)
+![Documentation Screenshot](https://raw.githubusercontent.com/<username>/<repository>/main/images/dashboard.png?raw=true)
+
+
 ## Screenshots
 
 
