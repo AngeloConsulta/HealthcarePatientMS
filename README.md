@@ -34,11 +34,11 @@ The **Healthcare Patient Management System** is a comprehensive console-based Ja
 
 
 ## Screenshots 
-![Dashboard Screenshot](https://raw.githubusercontent.com/<username>/<repository>/main/images/dashboard.png?raw=true)
-![Documentation Screenshot](https://raw.githubusercontent.com/<username>/<repository>/main/images/dashboard.png?raw=true)
+![Dashboard Screenshot](https://github.com/AngeloConsulta/HealthcarePatientMS/blob/3c962fc7b79b34b6b373665b7c01bd7516654e4b/src/images/Mainmenu.png)
+![Documentation Screenshot](https://github.com/AngeloConsulta/HealthcarePatientMS/blob/3c962fc7b79b34b6b373665b7c01bd7516654e4b/src/images/Documentation.png)
 
 
-## Screenshots
+
 
 
    
